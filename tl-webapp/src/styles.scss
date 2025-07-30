@@ -1,0 +1,185 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+:root {
+  --min-width: 350px; /* Set a minimum width for form fields */
+  --container-padding: 16px; /* Padding for the container */
+  --default-gap: 16px; /* Default gap for flex items */
+  --disabled-on-surface: var(
+      color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent));
+  --mat-sys-divider-width: 2px; /* Default divider width */
+  --divider-color: var(--mat-sys-divider-color, var(--mat-sys-on-surface-variant)); /* Default divider color */
+}
+
+.mat-divider {
+  height: var(--mat-sys-divider-width, 1px);
+  width: 100%;
+  background-color: var(--divider-color);
+  border: none !important; /* Remove any border */
+}
+
+.mat-divider.mat-divider-vertical {
+  width: var(--mat-sys-divider-width, 1px);
+  height: 100%;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--mat-sys-surface);
+}
+
+body {
+  margin: 0;
+  font-family: var(--mat-sys-body-large-font), "serif";
+  font-size: var(--mat-sys-body-large-size);
+  font-weight: var(--mat-sys-body-large-weight);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.fab-button {
+  position: fixed !important;
+  bottom: 16px !important; /* Abstand vom unteren Rand */
+  right: 16px !important; /* Abstand vom rechten Rand */
+  z-index: 1000 !important; /* Damit der Button immer oben liegt */
+}
+
+.error {
+  color: var(--mat-sys-error);
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+mat-form-field, app-label-above {
+  min-width: var(--min-width); /* Set a minimum width for the form field */
+  flex: 1 1 0; /* Allow the form field to grow and shrink */
+  box-sizing: border-box;
+}
+
+mat-form-field {
+  width: 100%; /* Ensure form fields take full width */
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  height: auto;
+  flex: 1;
+}
+
+.container {
+  padding: 16px;
+  flex: 1;
+}
+
+.container > :last-child {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-mdc-form-field-infix {
+  width: 100% !important; /* Set a fixed width for the input field */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column;
+  height: 100%; /* Ensure it takes full height */
+}
+
+.mat-mdc-form-field-flex {
+  height: 100%; /* Ensure the flex container takes full height */
+}
+
+.mat-mdc-icon-button {
+  padding: 0 !important; /* Remove padding for icon buttons */
+  height: 24px !important; /* Set a fixed height */
+  width: 24px !important; /* Set a fixed width */
+}
+
+.mat-mdc-form-field-textarea-control {
+  flex: auto; /* Allow the textarea to grow and shrink */
+}
+
+mat-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--mat-sys-on-background, rgba(0, 0, 0, 0.12)); /* Use the default divider color */
+}
+
+
+.mat-form-field-disabled {
+  /* give the entire field a background */
+
+  padding-top: 4px !important;
+
+  .mat-mdc-text-field-wrapper {
+    background-color: transparent !important; /* light grey background */
+    border-radius: 4px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* hide the underline and any hint or error messages */
+
+  .mdc-line-ripple,
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
+
+  /* remove the flex border around the input area */
+
+  .mat-form-field-flex {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: var(--mat-form-field-container-text-line-height, var(--mat-sys-body-large-line-height))
+  }
+
+  /* make the input look like plain text */
+
+  .mat-input-element {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    color: rgba(0, 0, 0, 0.87); /* default body text color */
+    font-size: inherit;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    cursor: default;
+  }
+
+  .mat-mdc-select-arrow-wrapper {
+    display: none !important; /* hide the dropdown arrow */
+  }
+
+  .active-on-disabled-button {
+    pointer-events: auto
+  }
+
+  app-field-label {
+    display: none !important; /* hide the label */
+  }
+}
+
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  padding-right: var(--container-padding) !important;
+}

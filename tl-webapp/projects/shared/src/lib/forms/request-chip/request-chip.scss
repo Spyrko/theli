@@ -1,0 +1,40 @@
+::ng-deep .mdc-evolution-chip {
+  background-color: var(--chip-background-color) !important; // helles Gelb wie bei Warnungen
+}
+
+::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before {
+  border-color: var(--chip-color) !important; // optional, für besseren Kontrast
+}
+
+::ng-deep .mdc-evolution-chip .mdc-evolution-chip__text-label {
+  color: var(--chip-color) !important;
+}
+
+mat-chip {
+  height: 24px;
+}
+
+.NOT_REQUESTED {
+  --chip-background-color: #D6D6D6;
+  --chip-color: #757575;
+}
+
+.REQUESTED {
+  --chip-background-color: #BBDEFB;
+  --chip-color: #2196F3;
+}
+
+.ACCEPTED {
+  --chip-background-color: #C8E6C9;
+  --chip-color: #4CAF50;
+}
+
+.REJECTED {
+  --chip-background-color: #FFCDD2;
+  --chip-color: #EF5350;
+}
+
+.WAITLISTED {
+  --chip-background-color: #FFE0B2;
+  --chip-color: #F57C00;
+}

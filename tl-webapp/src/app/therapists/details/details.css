@@ -1,0 +1,84 @@
+app-business-hours-list {
+  display: flex;
+  flex: 1;
+  min-width: var(--min-width);
+  box-sizing: border-box
+}
+
+textarea {
+  overflow-y: hidden;
+  resize: none;
+}
+
+#therapist-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.form-section {
+  flex: 1 1 var(--min-width);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-subsection {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#notes-section {
+  flex: 1 1 auto;
+  min-width: 400px;
+}
+
+#section-divider-horizontal {
+  display: none;
+}
+
+#notes {
+  min-height: 200px;
+}
+
+.resizable-textarea {
+  position: relative;
+}
+
+.mat-form-field-disabled {
+  padding-top: 0 !important;
+}
+
+.resizable-textarea:not(.mat-form-field-disabled)::after {
+  content: '↓'; /* Symbol unten */
+  position: absolute;
+  right: 8px;
+  bottom: 20px;
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 991px) {
+  #notes-section {
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  #section-divider-horizontal {
+    display: block;
+  }
+
+  #section-divider-vertical {
+    display: none;
+  }
+}
+
+input:disabled, textarea:disabled {
+  color: var(--mat-sys-on-surface) !important;
+}

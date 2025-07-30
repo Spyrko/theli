@@ -1,0 +1,21 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h1 style="flex: 0">{{ `${LOGIN_PATH}.title` | transloco }}</h1>
+  @if (errorMessage) {
+    <span style="color: var(--mat-sys-error); padding-bottom: 12px">
+        {{ errorMessage }}
+      </span>
+  }
+  <mat-form-field autoError>
+    <mat-label>{{ `${LOGIN_PATH}.username` | transloco }}</mat-label>
+    <input matInput formControlName="username" autocomplete="username"/>
+    <app-field-error/>
+  </mat-form-field>
+  <mat-form-field autoError>
+    <mat-label>{{ `${LOGIN_PATH}.password` | transloco }}</mat-label>
+    <input matInput type="password" formControlName="password" autocomplete="current-password"/>
+    <app-field-error/>
+  </mat-form-field>
+  <button mat-button="filled" type="submit" [disabled]="loginForm.invalid">
+    {{ `${LOGIN_PATH}.loginButton` | transloco }}
+  </button>
+</form>

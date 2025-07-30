@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+  frontend:
+    build:
+      context: ./tl-webapp
+    container_name: tl-webapp
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./tl-server
+    container_name: tl-server
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    container_name: tl-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

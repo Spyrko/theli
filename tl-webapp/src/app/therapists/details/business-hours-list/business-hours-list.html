@@ -1,0 +1,35 @@
+@if (disabled) {
+  <table mat-table [dataSource]="tableData">
+    <ng-container matColumnDef="dayOfWeek">
+      <td mat-cell *matCellDef="let row" class="day-of-week-col"> {{ `${ENUM_PATH}.dayOfWeek.${row.dayOfWeek}` | transloco }}</td>
+    </ng-container>
+    <ng-container matColumnDef="spacer">
+      <td mat-cell *matCellDef="let row"></td>
+    </ng-container>
+    @for (i of businessHoursIndices; track i) {
+      <ng-container [matColumnDef]="'businessHours' + i">
+        <td mat-cell *matCellDef="let row" class="business-hours-col">
+          {{ row.businessHours[i] }}
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+} @else {
+  <form class="business-hours-list">
+    @for (control of formControls; track control) {
+      <mat-form-field autoError>
+        <app-business-hours-input [formControl]="control" (removeClicked)="removeControl(control)"
+                                  (editClicked)="editControl(control)" (acceptClicked)="finishEditControl(control)"></app-business-hours-input>
+        <app-field-error/>
+      </mat-form-field>
+    }
+    @if (createFormControl) {
+      <mat-form-field autoError>
+        <app-business-hours-input [formControl]="createFormControl" (acceptClicked)="addControl()" #ctrl></app-business-hours-input>
+        <app-field-error [customErrorPath]="`${DETAILS_PATH}.errors`"/>
+      </mat-form-field>
+    }
+  </form>
+}

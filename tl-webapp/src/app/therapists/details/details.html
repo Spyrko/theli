@@ -1,0 +1,100 @@
+<!-- TODO: Fix Styling -->
+<ng-template #toolbarButtons>
+  @if (isCreateMode) {
+    <button mat-button type="submit" form="therapist-form">{{ `${DETAILS_PATH}.buttons.add` | transloco }}</button>
+  } @else if (isEditMode) {
+    <button mat-button type="submit" form="therapist-form">{{ `${DETAILS_PATH}.buttons.save` | transloco }}</button>
+  } @else {
+    <button mat-icon-button (click)="onEdit()" form="therapist-form">
+      <mat-icon>edit</mat-icon>
+    </button>
+  }
+</ng-template>
+
+<form *ngIf="therapistForm as form" [formGroup]="form" (ngSubmit)="onSubmit($event)" id="therapist-form">
+  <div class="form-section" style="max-width: 600px">
+    <div class="form-subsection" style="flex-direction: column">
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.requestStatus" | transloco }}</app-field-label>
+        <mat-select formControlName="requestStatus" required>
+          <mat-select-trigger>
+            <app-request-chip [value]="form.get('requestStatus')?.value"/>
+          </mat-select-trigger>
+          @for (status of RequestStatus; track status) {
+            <mat-option [value]="status">
+              <app-request-chip [value]="status"/>
+            </mat-option>
+          }
+        </mat-select>
+        <app-field-error/>
+      </mat-form-field>
+
+      @if (showWaitingTime) {
+        <mat-form-field autoError labelAbove>
+          <app-field-label>{{ DETAILS_PATH + ".label.waitingTime" | transloco }}</app-field-label>
+          <input
+            matInput
+            [matDatepicker]="datepicker"
+            formControlName="waitingTime"
+            [min]="DateTime.now()"/>
+          @if (!form.disabled) {
+            <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          }
+          <mat-datepicker #datepicker></mat-datepicker>
+          <app-field-error/>
+        </mat-form-field>
+      }
+    </div>
+    <mat-divider/>
+    <div class="form-subsection">
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.name" | transloco }}</app-field-label>
+        <input matInput formControlName="name" required>
+        <app-field-error/>
+      </mat-form-field>
+
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.specialization" | transloco }}</app-field-label>
+        <textarea matInput formControlName="specialization" rows="1"></textarea>
+        <app-field-error/>
+      </mat-form-field>
+
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.address" | transloco }}</app-field-label>
+        <textarea matInput formControlName="address" required rows="4"></textarea>
+        <app-field-error/>
+      </mat-form-field>
+    </div>
+
+    <mat-divider/>
+
+    <div class="form-subsection">
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.mail" | transloco }}</app-field-label>
+        <input matInput formControlName="emailAddress">
+        <app-field-error/>
+      </mat-form-field>
+
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.phone" | transloco }}</app-field-label>
+        <input matInput formControlName="phoneNumber">
+        <app-field-error/>
+      </mat-form-field>
+
+      <app-label-above [labelText]="DETAILS_PATH + '.label.businessHours' | transloco ">
+        <app-business-hours-list formControlName="contactTimes"/>
+      </app-label-above>
+    </div>
+  </div>
+  <mat-divider id="section-divider-horizontal"/>
+  <mat-divider id="section-divider-vertical" vertical/>
+  <div id="notes-section" class="form-section">
+    <div class="form-subsection" style="flex-direction: column;">
+      <mat-form-field autoError labelAbove>
+        <app-field-label>{{ DETAILS_PATH + ".label.notes" | transloco }}</app-field-label>
+        <textarea matInput formControlName="notes" id="notes"></textarea>
+        <app-field-error/>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

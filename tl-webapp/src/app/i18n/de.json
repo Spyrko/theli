@@ -1,0 +1,91 @@
+{
+  "app": {
+    "title": "Therapeutenliste",
+    "toolbar": {
+      "loginButton": "Anmelden",
+      "logoutButton": "Abmelden",
+      "registerButton": "Registrieren"
+    },
+    "login": {
+      "title": "Anmelden",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "loginButton": "Anmelden",
+      "errors": {
+        "invalidCredentials": "Benutzername oder Passwort ist ungültig."
+      }
+    },
+    "register": {
+      "title": "Registrieren",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "registerButton": "Registrieren",
+      "errors": {
+        "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+        "usernameTaken": "Benutzername ist bereits vergeben."
+      }
+    },
+    "details": {
+      "title": "Therapeut",
+      "createTitle": "Neuer Therapeut",
+      "buttons": {
+        "add": "Hinzufügen",
+        "save": "Speichern"
+      },
+      "errors": {
+        "allRequired": "Alle Felder sind erforderlich.",
+        "timePattern": "Die Uhrzeit muss im Format HH:mm angegeben werden."
+      },
+      "label": {
+        "name": "Name",
+        "mail": "EMail",
+        "phone": "Telefon",
+        "address": "Addresse",
+        "businessHours": "Erreichbarkeit",
+        "notes": "Notizen",
+        "specialization": "Spezialisierung",
+        "waitingTime": "Warteliste bis",
+        "requestStatus": "Status"
+      }
+    },
+    "overview": {
+      "card": {
+        "mail": "EMail",
+        "phone": "Telefon",
+        "waitlist": "Warteliste bis",
+        "buttons": {
+        }
+      }
+    }
+  },
+  "formFields": {
+    "errors": {
+      "required": "Dieses Feld ist erforderlich.",
+      "matDatepickerParse": "Ungültiges Format"
+    },
+    "businessHours": {
+      "dayOfWeek": {
+        "placeholder": "Wochentag"
+      }
+    }
+  },
+  "enum": {
+    "dayOfWeek": {
+      "MONDAY": "Montag",
+      "TUESDAY": "Dienstag",
+      "WEDNESDAY": "Mittwoch",
+      "THURSDAY": "Donnerstag",
+      "FRIDAY": "Freitag",
+      "SATURDAY": "Samstag",
+      "SUNDAY": "Sonntag"
+    },
+    "requestStatus": {
+      "NOT_REQUESTED": "Nicht Angefragt",
+      "REQUESTED": "Angefragt",
+      "ACCEPTED": "Akzeptiert",
+      "REJECTED": "Abgelehnt",
+      "WAITLISTED": "Auf Warteliste"
+    }
+  }
+}

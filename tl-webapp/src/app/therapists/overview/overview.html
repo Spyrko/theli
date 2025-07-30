@@ -1,0 +1,11 @@
+<div class="grid">
+  @for (therapist of therapists; track therapist) {
+    <app-card [therapist]="therapist" [routerLink]="`${therapist.id}`"/>
+  }
+</div>
+<button mat-fab color="primary" class="fab-button"
+        [routerLink]="['new']">
+  <mat-icon>add</mat-icon>
+</button>
+
+
