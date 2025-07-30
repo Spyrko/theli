@@ -19,9 +19,11 @@ export class AuthService {
   }
 
   logout(): void {
-    this.removeAccessToken();
-    this.removeRefreshToken();
-    this.router.navigate(['login']);
+    this.http.post('auth/logout', this.getRefreshToken()).then(() => {
+      this.removeAccessToken();
+      this.removeRefreshToken();
+      this.router.navigate(['login']);
+    })
   }
 
   hasAuthority(authority: string): boolean {

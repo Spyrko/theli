@@ -127,11 +127,12 @@ public class JwtService {
      * @return true if expired
      */
     private boolean isTokenExpired(@Nonnull String token) {
-        Date expiration = getParser()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-        return expiration.before(new Date());
+        try {
+            getParser().parseClaimsJws(token);
+            return false; // If parsing succeeds, token is not expired
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return true; // If an ExpiredJwtException is thrown, token is expired
+        }
     }
 
     @Nonnull
