@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 4200
 
 # Start Angular dev server, listen on all interfaces for Docker
-CMD ["npm", "start", "--", "--host", "0.0.0.0"]
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "4200", "--hmr=false"]
