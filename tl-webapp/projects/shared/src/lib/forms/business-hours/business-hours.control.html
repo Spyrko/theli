@@ -1,0 +1,57 @@
+<div role="group" class="bh-container" [formGroup]="parts" [attr.aria-labelledby]="parentFormField?.getLabelId()">
+  <mat-select #dayOfWeekSelect class="bh-day" formControlName="dayOfWeek"
+              [placeholder]="`${BUSINESS_HOURS_PATH}.dayOfWeek.placeholder` | transloco"
+  >
+    <mat-option *ngFor="let day of DayOfWeek" [value]="day">{{ `${ENUM_PATH}.dayOfWeek.${day}` | transloco }}</mat-option>
+  </mat-select>
+  <div class="bh-time">
+    <div class="bh-start">
+      <input style="text-align: right"
+             #openingInput
+             matInput
+             formControlName="openingTime"
+             placeholder="HH:mm"
+             [pattern]="timeRegex"
+      />
+      @if (!disabled) {
+        <button mat-icon-button matSuffix (click)="openingPicker.open()" type="button">
+          <mat-icon [class.error]="hasErrorState(openingInput)">schedule</mat-icon>
+        </button>
+      }
+      <ngx-mat-timepicker #openingPicker
+                          [format]="24"
+                          (timeSet)="setTime(openingInput, $event)"/>
+      <!--                          [max]="value?.closingTime || maxTime"/>-->
+
+    </div>
+    <span class="bh-separator">&ndash;</span>
+    <div class="bh-end">
+      <input #closingInput
+             matInput
+             formControlName="closingTime"
+             placeholder="HH:mm"
+             [pattern]="timeRegex"/>
+      @if (!disabled) {
+        <button mat-icon-button matSuffix (click)="closingPicker.open()" type="button">
+          <mat-icon [class.error]="hasErrorState(closingInput)">schedule</mat-icon>
+        </button>
+      }
+      <ngx-mat-timepicker #closingPicker
+                          [format]="24"
+                          (timeSet)="setTime(closingInput, $event)"/>
+      <!--                          [min]="value?.openingTime || minTime"/>-->
+    </div>
+  </div>
+  @if (!disabled) {
+    <button mat-icon-button matSuffix (click)="onAcceptClicked()" type="button">
+      <mat-icon>check</mat-icon>
+    </button>
+  } @else {
+    <button mat-icon-button matSuffix (click)="onEditClicked()" type="button" class="active-on-disabled-button">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button matSuffix (click)="onRemoveClicked()" type="button" class="active-on-disabled-button">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
+</div>

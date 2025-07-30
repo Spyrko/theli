@@ -1,0 +1,15 @@
+<mat-card *ngIf="therapist" class="therapist-card">
+  <mat-card-header>
+    <mat-card-title>{{ therapist.name }}</mat-card-title>
+    <mat-card-subtitle>
+      <app-request-chip [value]="therapist.requestStatus"/>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="therapist.specialization as value" style="font-weight: var(--mat-sys-label-medium-weight)">{{ value }}</p>
+    <p *ngIf="therapist.waitingTime?.toLocaleString() as value">{{ `${CARD_PATH + ".waitlist" | transloco}: ${value}` }} </p>
+    <p *ngIf="therapist.emailAddress as value">{{ `${CARD_PATH + ".mail" | transloco}: ${value}` }}</p>
+    <p *ngIf="therapist.phoneNumber as value">{{ `${CARD_PATH + ".phone" | transloco}: ${value}` }}</p>
+    <app-business-hours-list *ngIf="therapist.contactTimes as value" [businessHours]="value" [disabled]="true"></app-business-hours-list>
+  </mat-card-content>
+</mat-card>

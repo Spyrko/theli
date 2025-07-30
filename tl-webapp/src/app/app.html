@@ -1,0 +1,4 @@
+<app-toolbar [titlePath]="(titlePath$ | async) ?? `${APP_PATH}.title`" [showReturnArrow]="showReturnArrow" [buttons$]="toolbarButtons$"/>
+<div class="container">
+  <router-outlet (activate)="onActivate($event)"/>
+</div>

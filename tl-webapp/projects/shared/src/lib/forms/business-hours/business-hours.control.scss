@@ -1,0 +1,45 @@
+@use '@angular/material' as mat;
+
+.bh-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px
+}
+
+.bh-separator {
+  align-items: center;
+  margin: 0 1pt;
+  color: var(--mat-form-field-filled-input-text-color,
+    --mat-sys-on-surface);
+}
+
+:host-context(.mat-form-field-disabled) .bh-separator {
+  color: var(--disabled-on-surface);
+}
+
+.bh-day {
+  flex: 0 1 auto;
+  width: 100px;
+}
+
+.bh-start, .bh-end {
+  flex: 0 1 auto;
+  display: flex;
+  gap: 4px;
+}
+
+.bh-time {
+  flex: 1 1 auto;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+mat-timepicker-toggle {
+  height: 24px;
+}
+
+input {
+  width: 60px
+}
+

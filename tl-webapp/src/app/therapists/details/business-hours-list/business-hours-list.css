@@ -1,0 +1,43 @@
+tr {
+  padding: 0 16px
+}
+
+td + td{
+  padding-left: 0;
+}
+
+.day-of-week-col, .business-hours-col {
+  width: 0
+}
+
+.business-hours-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mat-mdc-cell {
+  border-bottom: none !important;
+}
+
+.mat-mdc-row {
+  height: 24px !important; /* Set a fixed height for the row */
+  font-size: var(--mat-sys-body-large-size) !important; /* Use the default font size */
+}
+
+table {
+  background-color: unset !important; /* Make the table background transparent */
+}
+
+table, form {
+  width: 100%;
+}
+
+:host {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.business-hours-list {
+  flex-direction: column;
+}
