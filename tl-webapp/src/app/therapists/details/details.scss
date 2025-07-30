@@ -17,8 +17,13 @@ textarea {
   width: 100%;
 }
 
-.form-section {
+.form-section:not(#notes-section) {
   flex: 1 1 var(--min-width);
+  min-width: var(--min-width);
+  max-width: 450px;
+}
+
+.form-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -32,7 +37,7 @@ textarea {
 }
 
 #notes-section {
-  flex: 1 1 auto;
+  flex: 1 1 400px;
   min-width: 400px;
 }
 
@@ -63,7 +68,7 @@ textarea {
   pointer-events: none;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 862px) {
   #notes-section {
     flex: 1 1 100%;
     max-width: 100%;
@@ -76,6 +81,10 @@ textarea {
 
   #section-divider-vertical {
     display: none;
+  }
+
+  .form-section:not(#notes-section) {
+    max-width: unset;
   }
 }
 

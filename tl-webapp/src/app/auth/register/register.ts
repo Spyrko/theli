@@ -21,7 +21,7 @@ import { MatButton } from '@angular/material/button';
     MatButton
   ],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrl: './register.scss'
 })
 export class Register {
   REGISTER_PATH = REGISTER_PATH;

@@ -15,7 +15,7 @@
     <input matInput type="password" formControlName="password" autocomplete="current-password"/>
     <app-field-error/>
   </mat-form-field>
-  <button mat-button="filled" type="submit" [disabled]="loginForm.invalid">
+  <button mat-flat-button type="submit" [disabled]="loginForm.invalid">
     {{ `${LOGIN_PATH}.loginButton` | transloco }}
   </button>
 </form>
