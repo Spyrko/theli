@@ -4,7 +4,7 @@
 @include mat.core();
 
 :root {
-  --min-width: 350px; /* Set a minimum width for form fields */
+  --min-width: 380px; /* Set a minimum width for form fields */
   --container-padding: 16px; /* Padding for the container */
   --default-gap: 16px; /* Default gap for flex items */
   --disabled-on-surface: var(

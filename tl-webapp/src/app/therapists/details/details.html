@@ -1,4 +1,3 @@
-<!-- TODO: Fix Styling -->
 <ng-template #toolbarButtons>
   @if (isCreateMode) {
     <button mat-button type="submit" form="therapist-form">{{ `${DETAILS_PATH}.buttons.add` | transloco }}</button>
@@ -11,8 +10,8 @@
   }
 </ng-template>
 
-<form *ngIf="therapistForm as form" [formGroup]="form" (ngSubmit)="onSubmit($event)" id="therapist-form">
-  <div class="form-section" style="max-width: 600px">
+<form *ngIf="therapistForm as form" [formGroup]="form" (ngSubmit)="onSubmit()" id="therapist-form">
+  <div class="form-section">
     <div class="form-subsection" style="flex-direction: column">
       <mat-form-field autoError labelAbove>
         <app-field-label>{{ DETAILS_PATH + ".label.requestStatus" | transloco }}</app-field-label>

@@ -1,4 +1,3 @@
-<!-- TODO: Fix Styling -->
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex-column">
   <h1>{{ `${REGISTER_PATH}.title` | transloco }}</h1>
 
@@ -19,7 +18,7 @@
     <input matInput type="password" formControlName="passwordConfirm" autocomplete="new-password" (blur)="revalidate()"/>
     <app-field-error [customErrorPath]="`${REGISTER_PATH}.errors`"/>
   </mat-form-field>
-  <button mat-button="filled" type="submit">
+  <button mat-flat-button type="submit">
     {{ `${REGISTER_PATH}.registerButton` | transloco }}
   </button>
 </form>

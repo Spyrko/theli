@@ -57,7 +57,7 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
     MatSelectTrigger
   ],
   templateUrl: './details.html',
-  styleUrl: './details.css'
+  styleUrl: './details.scss'
 })
 export class Details extends ToolbarButtonProvider implements AfterViewInit, OnInit {
   isCreateMode = false;
@@ -146,7 +146,7 @@ export class Details extends ToolbarButtonProvider implements AfterViewInit, OnI
     })
   }
 
-  onSubmit(event: Event) {
+  onSubmit() {
     if (this.therapistForm?.valid) {
       // Handle form submission logic here
       this.therapistService.putTherapist(this.therapistTs).then(therapist => {
