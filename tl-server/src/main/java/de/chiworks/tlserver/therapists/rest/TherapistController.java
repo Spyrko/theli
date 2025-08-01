@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.chiworks.tlserver.security.AuthService;
-import de.chiworks.tlserver.security.JwtService;
 import de.chiworks.tlserver.security.model.entities.user.User;
 import de.chiworks.tlserver.therapists.model.TherapistMapper;
 import de.chiworks.tlserver.therapists.model.entities.Therapist;
@@ -28,8 +29,6 @@ public class TherapistController {
     @Nonnull
     private final TherapistRepository therapistRepo;
     @Nonnull
-    private final JwtService jwtService;
-    @Nonnull
     private final TherapistMapper therapistMapper;
     @Nonnull
     private final AuthService authService;
@@ -41,13 +40,11 @@ public class TherapistController {
      */
     @Nonnull
     @GetMapping("/")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('CRUD_THERAPIST')")
     public Collection<TherapistCardTs> getTherapists() {
         User user = authService.getUser();
         Collection<Therapist> therapists = therapistRepo.getTherapistsByUser(user);
-        return therapists.stream()
-                         .map(therapistMapper::toTherapistCardTs)
-                         .toList();
+        return therapists.stream().map(therapistMapper::toTherapistCardTs).toList();
     }
 
     /**
@@ -58,7 +55,7 @@ public class TherapistController {
      */
     @Nonnull
     @PutMapping("/")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('CRUD_THERAPIST')")
     public TherapistTs putTherapist(@Nonnull @RequestBody TherapistTs therapistTs) {
         User user = authService.getUser();
         authorizeAccess(therapistTs, user);
@@ -73,7 +70,7 @@ public class TherapistController {
      */
     @Nonnull
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('CRUD_THERAPIST')")
     public TherapistTs getTherapist(@PathVariable long id) {
         User user = authService.getUser();
         TherapistTs therapist = therapistMapper.toTherapistTs(findTherapist(id));
@@ -98,8 +95,12 @@ public class TherapistController {
 
     @Nonnull
     private Therapist findTherapist(long id) {
-        return therapistRepo.findById(id)
-                            .orElseThrow(() -> new IllegalArgumentException("Therapist not found with ID: " + id));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Auth: " + auth);
+        System.out.println("Principal: " + auth.getPrincipal());
+        System.out.println("Authorities: " + auth.getAuthorities());
+        System.out.println("isAuthenticated: " + auth.isAuthenticated());
+        return therapistRepo.findById(id).orElseThrow(() -> new AccessDeniedException("Therapist not found with ID: " + id));
     }
 
 }

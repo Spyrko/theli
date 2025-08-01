@@ -9,7 +9,8 @@ import jakarta.annotation.Nonnull;
  * Implements GrantedAuthority to be used in Spring Security.
  */
 public enum Authority implements GrantedAuthority {
-    ADD_USER("ADD_USER");
+    NOOP("NOOP"),
+    CRUD_THERAPIST("CRUD_THERAPIST");
 
     @Nonnull
     private final String authority;

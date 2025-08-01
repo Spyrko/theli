@@ -35,22 +35,24 @@ public class SecurityConfig {
     @Nonnull
     @Bean
     public SecurityFilterChain securityFilterChain(@Nonnull HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        })
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+        return http.csrf(AbstractHttpConfigurer::disable)
+                   .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                                      .permitAll()
+                                                      .requestMatchers("/auth/**")
+                                                      .permitAll()
+                                                      .requestMatchers("/error")
+                                                      .permitAll()
+                                                      .anyRequest()
+                                                      .authenticated())
+                   .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                   .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                   .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                   .exceptionHandling(ex -> ex
+                           .authenticationEntryPoint((request, response, authException) ->
+                                   response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                           .accessDeniedHandler((request, response, accessDeniedException) ->
+                                   response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden")))
+                   .build();
     }
 
     @Nonnull

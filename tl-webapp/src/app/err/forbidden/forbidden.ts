@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-unauthorized',
+  selector: 'app-forbidden',
   imports: [
     MatGridList,
     MatGridTile
   ],
-  templateUrl: './unauthorized.html',
-  styleUrl: './unauthorized.css'
+  templateUrl: './forbidden.html',
+  styleUrl: './forbidden.css'
 })
-export class Unauthorized {
+export class Forbidden {
 
 }
