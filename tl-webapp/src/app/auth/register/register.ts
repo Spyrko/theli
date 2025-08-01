@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { AutoErrorDirective, FieldError, HttpService, passwordMatchValidator } from 'shared';
+import { AuthService, AutoErrorDirective, FieldError, HttpService, passwordMatchValidator } from 'shared';
 import { REGISTER_PATH } from '../../translation-paths';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MatButton } from '@angular/material/button';
@@ -33,7 +33,8 @@ export class Register {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpService
+    private http: HttpService,
+    private authService: AuthService
   ) {
     // Initialize form with validation
     this.registerForm = this.fb.group({
@@ -42,6 +43,10 @@ export class Register {
         passwordConfirm: ['', Validators.required],
       },
       {validators: passwordMatchValidator});
+
+    if (this.authService.isLoggedIn()) {
+      router.navigate(['']);
+    }
   }
 
   onSubmit(): void {

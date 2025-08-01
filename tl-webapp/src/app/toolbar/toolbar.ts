@@ -35,7 +35,7 @@ export class Toolbar {
 
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;
 
-  constructor(private loginService: AuthService) {
+  constructor(private authService: AuthService) {
   }
 
   @Input()
@@ -48,11 +48,11 @@ export class Toolbar {
   buttons$?: Observable<TemplateRef<any>>;
 
   get isLoggedIn(): boolean {
-    return this.loginService.isLoggedIn();
+    return this.authService.isLoggedIn();
   }
 
   get userName(): string {
-    return this.loginService.getUserName()!;
+    return this.authService.getUserName()!;
   }
 
   onReturnArrowClick(): void {
