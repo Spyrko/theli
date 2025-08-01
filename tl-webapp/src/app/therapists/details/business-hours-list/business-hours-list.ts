@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Optional, Self, } from '@angular/core';
+import { Component, Input, Optional, Self, } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { AutoErrorDirective, BusinessHours, BusinessHoursControl, dateToTimeString, FieldError } from 'shared';
 import { MatFormField } from '@angular/material/input';
@@ -45,7 +45,7 @@ export class BusinessHoursList implements ControlValueAccessor {
     }
   }
 
-  constructor(@Self() @Optional() public ngControl: NgControl, private elRef: ElementRef<HTMLElement>) {
+  constructor(@Self() @Optional() public ngControl: NgControl) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
@@ -100,7 +100,7 @@ export class BusinessHoursList implements ControlValueAccessor {
           rowOfDay.businessHours.push(`${dateToTimeString(bh.openingTime)} \u2013 ${dateToTimeString(bh.closingTime)}`);
         } else {
           acc.push({
-            dayOfWeek: bh.dayOfWeek,
+            dayOfWeek: bh.dayOfWeek!,
             businessHours: [`${dateToTimeString(bh.openingTime)} \u2013 ${dateToTimeString(bh.closingTime)}`]
           });
         }

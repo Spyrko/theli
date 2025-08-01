@@ -86,7 +86,7 @@ export class Details extends ToolbarButtonProvider implements AfterViewInit, OnI
       notes: [therapist?.notes || ''],
       rating: [therapist?.rating || ''],
       contactHistory: [therapist?.contactHistory || []],
-      waitingTime: [therapist?.waitingTime || ''],
+      waitingTime: [therapist?.waitingTime || null],
       requestStatus: [therapist?.requestStatus || RequestStatus.NOT_REQUESTED]
     });
   }
@@ -138,7 +138,6 @@ export class Details extends ToolbarButtonProvider implements AfterViewInit, OnI
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      console.log(this.textAreas)
       this.textAreas.forEach(textareaRef => {
         this.resizeTextarea(textareaRef.nativeElement);
         textareaRef.nativeElement.addEventListener('input', () => this.resizeTextarea(textareaRef.nativeElement));

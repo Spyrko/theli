@@ -16,7 +16,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { MatFormFieldControl, MatSuffix } from '@angular/material/form-field';
-import { BusinessHours, DayOfWeek } from '../../rest';
+import { BusinessHours, dateToTimeString, DayOfWeek, timeStringToDate } from '../../rest';
 import { AbstractControl, ControlValueAccessor, FormBuilder, FormGroup, NgControl, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Subject } from 'rxjs';
@@ -261,7 +261,12 @@ export class BusinessHoursControl implements MatFormFieldControl<BusinessHours>,
 
   get value(): BusinessHours | null {
     const val = this.parts.value;
-    return val ? {id: this._value?.id, dayOfWeek: val.dayOfWeek, openingTime: val.openingTime, closingTime: val.closingTime} : null;
+    return val ? {
+      id: this._value?.id,
+      dayOfWeek: val.dayOfWeek,
+      openingTime: timeStringToDate(val.openingTime),
+      closingTime: timeStringToDate(val.closingTime),
+    } : null;
   }
 
   set value(value: BusinessHours | null) {
@@ -269,8 +274,8 @@ export class BusinessHoursControl implements MatFormFieldControl<BusinessHours>,
     if (value) {
       this.parts.setValue({
         dayOfWeek: value.dayOfWeek,
-        openingTime: value.openingTime,
-        closingTime: value.closingTime
+        openingTime: dateToTimeString(value.openingTime),
+        closingTime: dateToTimeString(value.closingTime)
       });
     } else {
       this.parts.reset();
@@ -324,7 +329,6 @@ export class BusinessHoursControl implements MatFormFieldControl<BusinessHours>,
   minTime = DateTime.fromObject({hour: 0, minute: 0});
 
   onAcceptClicked() {
-    console.log("acc", this.ngControl.value)
     this.parts.markAllAsTouched();
     this.parts.updateValueAndValidity();
     this.ngControl.control?.markAsTouched();

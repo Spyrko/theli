@@ -2,11 +2,17 @@ import { HttpEvent, HttpHandlerFn, HttpRequest, HttpResponse } from '@angular/co
 import { map, Observable } from 'rxjs';
 import { DateTime } from 'ts-luxon';
 
-export function timeStringToDate(time: string): DateTime {
-  return DateTime.fromFormat(time, "HH:mm");
+export function timeStringToDate(time?: string): DateTime | undefined {
+  if (!time) {
+    return undefined;
+  }
+  return DateTime.fromFormat(time, "HH:mm", {zone: 'utc'});
 }
 
-export function dateToTimeString(date: DateTime): string {
+export function dateToTimeString(date?: DateTime): string {
+  if (!date) {
+    return '';
+  }
   const hours = date.hour.toString().padStart(2, '0');
   const minutes = date.minute.toString().padStart(2, '0');
   return `${hours}:${minutes}`;
@@ -17,14 +23,14 @@ export function dateTimeInterceptor(req: HttpRequest<any>, next: HttpHandlerFn):
   return next(req).pipe(
     map(event => {
       if (event instanceof HttpResponse) {
-        return event.clone({body: convertDates(event.body)});
+        return event.clone({body: convertToDateTime(event.body)});
       }
       return event;
     })
   );
 }
 
-function convertDates(obj: any): any {
+function convertToDateTime(obj: any): any {
   if (obj === null || obj === undefined) return obj;
 
   if (typeof obj === 'string' && isIsoDate(obj)) {
@@ -32,13 +38,13 @@ function convertDates(obj: any): any {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(value => convertDates(value));
+    return obj.map(value => convertToDateTime(value));
   }
 
   if (typeof obj === 'object') {
     const newObj: any = {};
     for (const key in obj) {
-      newObj[key] = convertDates(obj[key]);
+      newObj[key] = convertToDateTime(obj[key]);
     }
     return newObj;
   }
