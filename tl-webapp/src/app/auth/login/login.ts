@@ -37,7 +37,7 @@ export class Login implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private loginService: AuthService,
+    private authService: AuthService,
     private translocoService: TranslocoService
   ) {
     // Initialize form with validation
@@ -45,10 +45,14 @@ export class Login implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
+
+    if (this.authService.isLoggedIn()) {
+      router.navigate(['']);
+    }
   }
 
   ngOnInit() {
-    if (this.loginService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       // If user is already logged in, redirect to home page
       this.router.navigate([REDIRECT_URL]);
     }
@@ -62,7 +66,7 @@ export class Login implements OnInit {
 
     this.errorMessage = null;
 
-    this.loginService.login(this.loginForm.value).then(() => this.router.navigate([REDIRECT_URL])).catch(() => this.errorMessage = this.translocoService.translate(`${this.LOGIN_PATH}.errors.invalidCredentials`))
+    this.authService.login(this.loginForm.value).then(() => this.router.navigate([REDIRECT_URL])).catch(() => this.errorMessage = this.translocoService.translate(`${this.LOGIN_PATH}.errors.invalidCredentials`))
   }
 
   protected readonly REGISTER_PATH = REGISTER_PATH;

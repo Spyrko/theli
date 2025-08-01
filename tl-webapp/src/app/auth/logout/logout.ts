@@ -8,12 +8,12 @@ import { AuthService } from 'shared';
   template: '',
 })
 export class Logout implements OnInit {
-  constructor(private router: Router, private loginService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
   }
 
   ngOnInit(): void {
     // Perform logout login. clearing tokens, redirecting to login page
-    this.loginService.logout();
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 

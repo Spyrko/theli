@@ -2,7 +2,7 @@ import { Component, Input, Optional, Self, } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { AutoErrorDirective, BusinessHours, BusinessHoursControl, dateToTimeString, FieldError } from 'shared';
 import { MatFormField } from '@angular/material/input';
-import { BUSINESS_HOURS_PATH, DETAILS_PATH, ENUM_PATH } from '../../../translation-paths';
+import { DETAILS_PATH, ENUM_PATH } from '../../../translation-paths';
 import { MatCell, MatCellDef, MatColumnDef, MatRow, MatRowDef, MatTable } from '@angular/material/table';
 import { TranslocoPipe } from '@ngneat/transloco';
 
@@ -95,6 +95,7 @@ export class BusinessHoursList implements ControlValueAccessor {
       .map(control => control.value)
       .filter(bh => !!bh)
       .reduce((acc, bh): Row[] => {
+        // TODO increase readability
         const rowOfDay = acc.find((row) => row.dayOfWeek === bh.dayOfWeek)
         if (rowOfDay) {
           rowOfDay.businessHours.push(`${dateToTimeString(bh.openingTime)} \u2013 ${dateToTimeString(bh.closingTime)}`);
@@ -117,6 +118,7 @@ export class BusinessHoursList implements ControlValueAccessor {
   }
 
   private sortControls() {
+    // TODO broken, since day of week is a string, not a number anymore
     this.formControls.sort((a, b) => {
       const dayA = a.value?.dayOfWeek ?? '';
       const dayB = b.value?.dayOfWeek ?? '';
@@ -146,7 +148,6 @@ export class BusinessHoursList implements ControlValueAccessor {
     this.onChange();
   }
 
-  protected readonly BUSINESS_HOURS_PATH = BUSINESS_HOURS_PATH;
   protected readonly ENUM_PATH = ENUM_PATH;
 }
 
