@@ -1,6 +1,7 @@
 package de.chiworks.tlserver.security.model;
 
-import static de.chiworks.tlserver.security.model.Authority.ADD_USER;
+import static de.chiworks.tlserver.security.model.Authority.CRUD_THERAPIST;
+import static de.chiworks.tlserver.security.model.Authority.NOOP;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +24,8 @@ public enum Role {
 
     @Nonnull
     private final Map<String, Collection<Authority>> authoritiesMap = Map.of(
-            "USER", List.of(),
-            "ADMIN", List.of(ADD_USER)
+            "USER", List.of(CRUD_THERAPIST),
+            "ADMIN", List.of(NOOP)
     );
 
     Role(@Nonnull String role) {

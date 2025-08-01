@@ -7,6 +7,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import de.chiworks.tlserver.security.model.entities.user.User;
 import de.chiworks.tlserver.security.model.entities.user.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,27 +44,40 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @Nonnull HttpServletResponse response,
             @Nonnull FilterChain filterChain)
             throws ServletException, IOException {
+        try {
+            // Get the Authorization header (if any)
+            String authHeader = request.getHeader("Authorization");
 
-        // Get the Authorization header (if any)
-        String authHeader = request.getHeader("Authorization");
+            // Continue without processing if header is missing or malformed
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        // Continue without processing if header is missing or malformed
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // Remove "Bearer " prefix to get the token
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+            User user = userRepo.findByUsername(username).orElse(null);
+
+            // Validate token and set authentication if valid
+            if (user != null && jwtService.isTokenValid(token, user)) {
+                authService.setAuthentication(token, user);
+            }
+
+            // Continue the filter chain
             filterChain.doFilter(request, response);
-            return;
+
+        } catch (ExpiredJwtException ex) {
+            respondWithUnauthorized(response, "JWT token expired");
+        } catch (JwtException ex) {
+            respondWithUnauthorized(response, "Invalid JWT token");
         }
+    }
 
-        // Remove "Bearer " prefix to get the token
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userRepo.findByUsername(username).orElse(null);
-
-        // Validate token and set authentication if valid
-        if (user != null && jwtService.isTokenValid(token, user)) {
-            authService.setAuthentication(token, user);
-        }
-
-        // Continue the filter chain
-        filterChain.doFilter(request, response);
+    private void respondWithUnauthorized(@Nonnull HttpServletResponse response, @Nonnull String s) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"" + s + "\"}");
+        response.getWriter().flush();
     }
 }
