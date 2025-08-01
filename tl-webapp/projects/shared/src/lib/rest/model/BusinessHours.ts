@@ -14,17 +14,17 @@ export interface BusinessHours {
   /**
    * Day of the week for which these business hours apply.
    */
-  dayOfWeek: DayOfWeek;
+  dayOfWeek?: DayOfWeek;
 
   /**
    * Opening time for the therapist on the specified day.
    * Format: "HH:mm" (24-hour format).
    */
-  openingTime: DateTime;
+  openingTime?: DateTime;
 
   /**
    * Closing time for the therapist on the specified day.
    * Format: "HH:mm" (24-hour format).
    */
-  closingTime: DateTime;
+  closingTime?: DateTime;
 }
