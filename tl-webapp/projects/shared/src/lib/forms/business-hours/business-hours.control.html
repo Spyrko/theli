@@ -24,7 +24,7 @@
       <!--                          [max]="value?.closingTime || maxTime"/>-->
 
     </div>
-    <span class="bh-separator">&ndash;</span>
+    <span class="bh-separator" [ngClass]="{'mdc-text-field__input': disabled}">&ndash;</span>
     <div class="bh-end">
       <input #closingInput
              matInput

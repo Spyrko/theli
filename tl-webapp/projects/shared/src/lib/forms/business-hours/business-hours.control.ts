@@ -23,7 +23,7 @@ import { Subject } from 'rxjs';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { MatFormField, MatInput } from '@angular/material/input';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { NgForOf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { SharedLibConfig } from '../../lib-config';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MatIconButton } from '@angular/material/button';
@@ -66,7 +66,8 @@ const timePatternValidator = (businessHoursControl: BusinessHoursControl) =>
     MatIconButton,
     MatSuffix,
     NgxMatTimepickerComponent,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    NgClass
   ],
   providers: [{provide: MatFormFieldControl, useExisting: BusinessHoursControl}]
 })

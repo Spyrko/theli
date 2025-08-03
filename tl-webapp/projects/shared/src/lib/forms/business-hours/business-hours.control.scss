@@ -9,12 +9,7 @@
 .bh-separator {
   align-items: center;
   margin: 0 1pt;
-  color: var(--mat-form-field-filled-input-text-color,
-    --mat-sys-on-surface);
-}
-
-:host-context(.mat-form-field-disabled) .bh-separator {
-  color: var(--disabled-on-surface);
+  width: unset;
 }
 
 .bh-day {

@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: '403', component: Forbidden},
   {path: '404', component: NotFound},
   {path: '', redirectTo: '/therapists', pathMatch: 'full'},
-  {path: '**', redirectTo: '/404'},
+  // {path: '**', redirectTo: '/404'},
 ];
 
 bootstrapApplication(App, {

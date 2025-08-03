@@ -3,9 +3,11 @@
 mat-card {
   cursor: pointer;
   transition: box-shadow 0.2s ease-in-out;
+  color: var(--mat-sys-on-surface-container);
 }
 
 mat-card:hover {
   @include mat.elevation(8)
 }
+
 
