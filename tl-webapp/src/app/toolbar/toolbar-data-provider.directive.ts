@@ -4,11 +4,11 @@ import { ReplaySubject } from 'rxjs';
 @Directive()
 export abstract class ToolbarDataProvider {
   @ViewChild('toolbarButtons')
-  protected set buttons(buttons: TemplateRef<any>) {
+  protected set buttons(buttons: TemplateRef<any> | null) {
     this.toolbarButtons$.next(buttons);
   }
 
-  toolbarButtons$ = new ReplaySubject<TemplateRef<any>>(1)
+  toolbarButtons$ = new ReplaySubject<TemplateRef<any> | null>(1)
   titlePath$ = new ReplaySubject<string | null>(1);
   showReturnArrow$ = new ReplaySubject<boolean>(1);
 

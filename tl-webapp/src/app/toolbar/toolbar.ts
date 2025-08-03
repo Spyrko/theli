@@ -8,8 +8,7 @@ import { AuthService } from 'shared';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { AvatarModule } from 'ngx-avatars';
-import { AsyncPipe, Location, NgTemplateOutlet } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Location, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-toolbar',
@@ -25,8 +24,7 @@ import { Observable } from 'rxjs';
     MatMenuItem,
     MatMenuTrigger,
     MatIconButton,
-    NgTemplateOutlet,
-    AsyncPipe
+    NgTemplateOutlet
   ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.css'
@@ -45,7 +43,7 @@ export class Toolbar {
   titlePath!: string;
 
   @Input()
-  buttons$?: Observable<TemplateRef<any>>;
+  buttons: TemplateRef<any> | null = null;
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();

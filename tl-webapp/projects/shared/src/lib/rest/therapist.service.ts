@@ -19,8 +19,12 @@ export class TherapistService {
     return await this.http.get<TherapistCardTs[]>("therapists/")
   }
 
-  async deleteTherapist(id: string): Promise<void> {
+  async deleteTherapist(id: string | number): Promise<void> {
     return await this.http.delete("therapists/" + id);
+  }
+
+  async deleteTherapists(ids: ( string | number )[]): Promise<void> {
+    return await this.http.delete("therapists/", {ids});
   }
 
 }

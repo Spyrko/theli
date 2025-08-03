@@ -27,9 +27,9 @@ export class HttpService {
     );
   }
 
-  async delete<T>(endpoint: string): Promise<T> {
+  async delete<T>(endpoint: string, params?: any): Promise<T> {
     return firstValueFrom(
-      this.http.delete<T>(`${this.libConfig.apiUrl}/${endpoint}`)
+      this.http.delete<T>(`${this.libConfig.apiUrl}/${endpoint}`, {params})
     );
   }
 }

@@ -1,6 +1,8 @@
 package de.chiworks.tlserver.therapists.rest;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.chiworks.tlserver.security.AuthService;
@@ -77,6 +80,18 @@ public class TherapistController {
         TherapistTs therapist = therapistMapper.toTherapistTs(findTherapist(id));
         authorizeAccess(therapist, user);
         return therapist;
+    }
+
+    @DeleteMapping("/")
+    @PreAuthorize("hasAuthority('CRUD_THERAPIST')")
+    public void deleteTherapists(@Nonnull @RequestParam List<Integer> ids) {
+        User user = authService.getUser();
+        ids.stream()
+           .map((id) -> therapistMapper.toTherapistTs(findTherapist(id)))
+           .peek((therapistTs) -> authorizeAccess(therapistTs, user))
+           .map(TherapistTs::getId)
+           .filter(Objects::nonNull)
+           .forEach(therapistRepo::deleteById);
     }
 
     @DeleteMapping("/{id}")

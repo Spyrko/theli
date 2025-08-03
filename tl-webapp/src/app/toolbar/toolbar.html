@@ -11,8 +11,8 @@
 
     <div class="spacer"></div>
 
-    @if (buttons$) {
-      <ng-container *ngTemplateOutlet="buttons$ | async"/>
+    @if (buttons) {
+      <ng-container *ngTemplateOutlet="buttons"/>
     } @else {
       @if (isLoggedIn) {
         <div>

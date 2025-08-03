@@ -56,7 +56,15 @@
         "waitlist": "Warteliste bis",
         "buttons": {
           "delete": "Löschen"
+        },
+        "deleteConfirm": {
+          "message": "Möchten sie {{name}} wirklich löschen?"
         }
+      },
+      "deleteConfirm": {
+        "title": "Löschen bestätigen",
+        "message": "Möchten sie die ausgewählten {{count}} Therapeuten wirklich löschen?",
+        "confirm": "Löschen"
       }
     }
   },
@@ -69,6 +77,10 @@
       "dayOfWeek": {
         "placeholder": "Wochentag"
       }
+    },
+    "confirmDialog": {
+      "confirm": "OK",
+      "cancel": "Abbrechen"
     }
   },
   "enum": {

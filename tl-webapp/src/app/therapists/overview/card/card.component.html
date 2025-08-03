@@ -11,7 +11,7 @@
     </button>
     <mat-menu #contextMenu="matMenu">
       <button mat-menu-item
-              (click)="onDeleteClicked($event)"
+              (click)="onDeleteClicked()"
               (mousedown)="$event.stopPropagation()">
         <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
       </button>

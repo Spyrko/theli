@@ -1,5 +1,5 @@
-<app-toolbar [titlePath]="(titlePath$ | async) ?? `${APP_PATH}.title`" [showReturnArrow]="(showReturnArrow$ | async)"
-             [buttons$]="toolbarButtons$"/>
+<app-toolbar [titlePath]="(titlePath$ | async) ?? `${APP_PATH}.title`" [showReturnArrow]="showReturnArrow$ | async"
+             [buttons]="toolbarButtons$ | async"/>
 <div class="container">
   <router-outlet (activate)="onActivate($event)"/>
 </div>

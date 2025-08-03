@@ -7,6 +7,7 @@ export const OVERVIEW_PATH = `${APP_PATH}.overview`
 export const CARD_PATH = `${OVERVIEW_PATH}.card`
 
 export const FORM_FIELD_PATH = `formFields`;
+export const CONFIRM_DIALOG_PATH = `${FORM_FIELD_PATH}.confirmDialog`;
 export const BUSINESS_HOURS_PATH = `${FORM_FIELD_PATH}.businessHours`;
 export const ERROR_PATH = `${FORM_FIELD_PATH}.errors`;
 export const ENUM_PATH = `enum`
