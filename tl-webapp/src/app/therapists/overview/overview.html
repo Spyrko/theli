@@ -8,6 +8,7 @@
     <app-card appLongPress [therapist]="therapist"
               (shortPress)="onCardClick(therapist)"
               (longPress)="onCardLongClick(therapist)"
+              (updated)="reloadTherapists()"
               [ngClass]="{ selected: selectedTherapists.includes(therapist)}"/>
   }
 </div>

@@ -55,6 +55,7 @@
         "phone": "Telefon",
         "waitlist": "Warteliste bis",
         "buttons": {
+          "delete": "Löschen"
         }
       }
     }

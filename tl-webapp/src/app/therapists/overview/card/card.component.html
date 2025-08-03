@@ -4,6 +4,18 @@
     <mat-card-subtitle>
       <app-request-chip [value]="therapist.requestStatus"/>
     </mat-card-subtitle>
+    <button mat-icon-button
+            [matMenuTriggerFor]="contextMenu"
+            (mousedown)="$event.stopPropagation()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #contextMenu="matMenu">
+      <button mat-menu-item
+              (click)="onDeleteClicked($event)"
+              (mousedown)="$event.stopPropagation()">
+        <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
+      </button>
+    </mat-menu>
   </mat-card-header>
   <mat-card-content>
     <p *ngIf="therapist.specialization as value" style="font-weight: var(--mat-sys-label-medium-weight)">{{ value }}</p>
