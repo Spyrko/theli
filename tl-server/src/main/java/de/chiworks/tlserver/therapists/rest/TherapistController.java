@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,6 +77,15 @@ public class TherapistController {
         TherapistTs therapist = therapistMapper.toTherapistTs(findTherapist(id));
         authorizeAccess(therapist, user);
         return therapist;
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('CRUD_THERAPIST')")
+    public void deleteTherapist(@PathVariable long id) {
+        User user = authService.getUser();
+        TherapistTs therapistTs = therapistMapper.toTherapistTs(findTherapist(id));
+        authorizeAccess(therapistTs, user);
+        therapistRepo.deleteById(id);
     }
 
     @Nonnull

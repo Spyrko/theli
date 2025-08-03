@@ -10,4 +10,10 @@ mat-card:hover {
   @include mat.elevation(8)
 }
 
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
 

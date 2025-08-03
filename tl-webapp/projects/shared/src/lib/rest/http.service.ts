@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { SharedLibConfig } from '../lib-config';
@@ -27,14 +27,9 @@ export class HttpService {
     );
   }
 
-  get headers(): { headers: HttpHeaders } | undefined {
-    if (!localStorage.getItem('token')) {
-      return undefined
-    }
-    return {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      })
-    }
+  async delete<T>(endpoint: string): Promise<T> {
+    return firstValueFrom(
+      this.http.delete<T>(`${this.libConfig.apiUrl}/${endpoint}`)
+    );
   }
 }

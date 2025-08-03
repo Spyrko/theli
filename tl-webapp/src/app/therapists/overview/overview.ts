@@ -30,10 +30,10 @@ export class Overview extends ToolbarDataProvider implements OnInit {
   selectedTherapists: TherapistCardTs[] = [];
 
 
-  constructor(therapistService: TherapistService, private route: ActivatedRoute, private router: Router, private location: Location) {
+  constructor(private therapistService: TherapistService, private route: ActivatedRoute, private router: Router, private location: Location) {
     super();
     this.updateToolbar();
-    therapistService.getTherapists().then((therapists) => this.therapists = therapists)
+    this.reloadTherapists();
   }
 
   ngOnInit(): void {
@@ -79,4 +79,7 @@ export class Overview extends ToolbarDataProvider implements OnInit {
     this.showReturnArrow = this.multiSelectMode;
   }
 
+  reloadTherapists() {
+    this.therapistService.getTherapists().then((therapists) => this.therapists = therapists)
+  }
 }
