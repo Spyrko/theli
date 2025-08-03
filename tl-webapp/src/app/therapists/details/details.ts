@@ -18,10 +18,9 @@ import { BusinessHoursList } from './business-hours-list/business-hours-list';
 import { DETAILS_PATH, ENUM_PATH } from '../../translation-paths';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { TranslocoPipe } from '@ngneat/transloco';
-import { ToolbarButtonProvider } from '../../toolbar/toolbar-button-provider';
+import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 import { TextareaDirective } from './text-area.directive';
 import { MatIcon } from '@angular/material/icon';
-import { ReplaySubject } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MatOption, MatSelect, MatSelectTrigger } from '@angular/material/select';
 import { DateTime } from 'ts-luxon';
@@ -59,11 +58,9 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
   templateUrl: './details.html',
   styleUrl: './details.scss'
 })
-export class Details extends ToolbarButtonProvider implements AfterViewInit, OnInit {
+export class Details extends ToolbarDataProvider implements AfterViewInit, OnInit {
   isCreateMode = false;
   isEditMode = false;
-  titlePath$ = new ReplaySubject<string>(1);
-  showReturnArrow = true;
   therapistForm?: FormGroup;
   protected readonly DETAILS_PATH = DETAILS_PATH;
   @ViewChildren(TextareaDirective, {read: ElementRef})
@@ -96,7 +93,7 @@ export class Details extends ToolbarButtonProvider implements AfterViewInit, OnI
               private fb: FormBuilder,
               private therapistService: TherapistService) {
     super();
-    // dateAdapter.setLocale('de-DE')
+    this.showReturnArrow = true;
   }
 
   private get therapistTs(): TherapistTs {
@@ -123,7 +120,7 @@ export class Details extends ToolbarButtonProvider implements AfterViewInit, OnI
       return
     }
     this.isCreateMode = id === 'new';
-    this.titlePath$.next(this.isCreateMode ? DETAILS_PATH + ".createTitle" : DETAILS_PATH + ".title");
+    this.titlePath = this.isCreateMode ? DETAILS_PATH + ".createTitle" : DETAILS_PATH + ".title";
     if (!this.isCreateMode) {
       this.therapistService.getTherapist(id).then((therapist) => {
           this.loadedTherapist = therapist;

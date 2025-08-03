@@ -19,14 +19,14 @@ import { Toolbar } from './toolbar/toolbar';
 export class App {
   toolbarButtons$?: Observable<TemplateRef<any>>;
   titlePath$?: Observable<string>;
-  showReturnArrow = false;
+  showReturnArrow$?: Observable<boolean>;
 
   constructor() {
   }
 
   onActivate(component: any) {
     this.titlePath$ = component.titlePath$;
-    this.showReturnArrow = component.showReturnArrow || false;
+    this.showReturnArrow$ = component.showReturnArrow$;
     this.toolbarButtons$ = component.toolbarButtons$;
   }
 

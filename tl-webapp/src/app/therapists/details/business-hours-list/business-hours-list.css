@@ -2,7 +2,7 @@ tr {
   padding: 0 16px
 }
 
-td + td{
+td + td {
   padding-left: 0;
 }
 
@@ -22,6 +22,7 @@ td + td{
 .mat-mdc-row {
   height: 24px !important; /* Set a fixed height for the row */
   font-size: var(--mat-sys-body-large-size) !important; /* Use the default font size */
+  color: inherit;
 }
 
 table {

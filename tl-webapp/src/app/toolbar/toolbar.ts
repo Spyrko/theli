@@ -8,7 +8,7 @@ import { AuthService } from 'shared';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { AvatarModule } from 'ngx-avatars';
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, Location, NgTemplateOutlet } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -35,11 +35,11 @@ export class Toolbar {
 
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private location: Location) {
   }
 
   @Input()
-  showReturnArrow?: boolean;
+  showReturnArrow: boolean | null = null;
 
   @Input()
   titlePath!: string;
@@ -56,6 +56,6 @@ export class Toolbar {
   }
 
   onReturnArrowClick(): void {
-    history.back()
+    this.location.back()
   }
 }

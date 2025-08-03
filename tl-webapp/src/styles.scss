@@ -183,3 +183,8 @@ mat-divider {
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
   padding-right: var(--container-padding) !important;
 }
+
+.selected {
+  --mat-sys-on-surface-container: var(--mat-sys-on-primary-container);
+  --mat-sys-surface-container-low: var(--mat-sys-primary-container);
+}

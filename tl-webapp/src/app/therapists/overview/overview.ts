@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CardComponent } from './card/card.component';
-import { DayOfWeek, RequestStatus, TherapistCardTs, TherapistService } from 'shared';
-import { DateTime } from 'ts-luxon';
+import { LongPressDirective, TherapistCardTs, TherapistService } from 'shared';
+import { Subscription } from 'rxjs';
+import { Location, NgClass } from '@angular/common';
+import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 
 @Component({
   selector: 'app-overview',
@@ -12,42 +14,69 @@ import { DateTime } from 'ts-luxon';
     MatIcon,
     MatFabButton,
     RouterLink,
-    CardComponent
+    CardComponent,
+    LongPressDirective,
+    NgClass
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.css'
 })
-export class Overview {
+export class Overview extends ToolbarDataProvider implements OnInit {
   therapists: TherapistCardTs[] = []
 
-  constructor(therapistService: TherapistService) {
+  subscriptions: Subscription[] = [];
+
+  multiSelectMode = false;
+  selectedTherapists: TherapistCardTs[] = [];
+
+
+  constructor(therapistService: TherapistService, private route: ActivatedRoute, private router: Router, private location: Location) {
+    super();
+    this.updateToolbar();
     therapistService.getTherapists().then((therapists) => this.therapists = therapists)
   }
-}
 
-const therapist: TherapistCardTs = {
-  name: 'John Doe',
-  specialization: 'Specialization Example',
-  contactTimes: [
-    {
-      dayOfWeek: DayOfWeek.MONDAY,
-      openingTime: DateTime.fromObject({hour: 9, minute: 0}),
-      closingTime: DateTime.fromObject({hour: 15, minute: 0})
-    },
-    {
-      dayOfWeek: DayOfWeek.MONDAY,
-      openingTime: DateTime.fromObject({hour: 16, minute: 0}),
-      closingTime: DateTime.fromObject({hour: 19, minute: 0})
-    },
-    {
-      dayOfWeek: DayOfWeek.FRIDAY,
-      openingTime: DateTime.fromObject({hour: 8, minute: 30}),
-      closingTime: DateTime.fromObject({hour: 14, minute: 30})
+  ngOnInit(): void {
+    this.subscriptions.push(this.route.queryParamMap.subscribe(params => {
+        const newMode = !!params.get('multiSelect');
+        if (newMode !== this.multiSelectMode) {
+          this.selectedTherapists = [];
+          this.multiSelectMode = newMode;
+          this.updateToolbar();
+        }
+      })
+    );
+  }
+
+  onCardClick(therapist: TherapistCardTs): void {
+    if (this.multiSelectMode) {
+      if (this.selectedTherapists.includes(therapist)) {
+        this.selectedTherapists = this.selectedTherapists.filter(t => t !== therapist);
+        if (this.selectedTherapists.length === 0) {
+          this.location.back()
+        }
+      } else {
+        this.selectedTherapists.push(therapist);
+      }
+    } else {
+      this.router.navigate([therapist.id], {relativeTo: this.route});
     }
-  ],
-  emailAddress: 'sample@address.com',
-  phoneNumber: '123-456-7890',
-  requestStatus: RequestStatus.REQUESTED,
-  waitingTime: DateTime.fromObject({year: 2025, month: 10, day: 1}),
-  id: 17
+  }
+
+  onCardLongClick(therapist: TherapistCardTs): void {
+    if (this.multiSelectMode) {
+      this.onCardClick(therapist);
+    } else {
+      this.router.navigate([], {
+        queryParams: {multiSelect: true},
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
+  updateToolbar(): void {
+    this.titlePath = this.multiSelectMode ? '' : null;
+    this.showReturnArrow = this.multiSelectMode;
+  }
+
 }
