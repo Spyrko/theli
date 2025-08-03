@@ -1,4 +1,4 @@
 export class SharedLibConfig {
-  constructor(public apiUrl: string, public translationPaths: { businessHours: string, error: string, enum: string }) {
+  constructor(public apiUrl: string, public translationPaths: { businessHours: string, error: string, enum: string, confirmDialog: string }) {
   };
 }

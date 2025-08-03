@@ -1,5 +1,16 @@
 <ng-template #toolbarButtons>
-
+  <button mat-icon-button
+          [matMenuTriggerFor]="contextMenu"
+          (mousedown)="$event.stopPropagation()">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #contextMenu="matMenu">
+    <button mat-menu-item
+            (click)="onDeleteClicked()"
+            (mousedown)="$event.stopPropagation()">
+      <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
+    </button>
+  </mat-menu>
 </ng-template>
 
 

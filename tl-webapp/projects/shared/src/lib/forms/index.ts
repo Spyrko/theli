@@ -6,3 +6,4 @@ export * from './label-above/label-above';
 export * from './label-above/label-above.directive';
 export * from './request-chip/request-chip';
 export * from './long-press.directive'
+export * from './confirm-dialog';
