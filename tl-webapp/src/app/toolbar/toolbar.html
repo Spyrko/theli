@@ -1,21 +1,22 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    @if (showReturnArrow) {
-      <button mat-icon-button (click)="onReturnArrowClick()" id="back-button">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    }
+    <div>
+      @if (showReturnArrow) {
+        <button mat-icon-button (click)="onReturnArrowClick()" id="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      }
 
-    <!--    TODO add link to home page-->
-    <span>{{ titlePath | transloco }}</span>
+      <!--    TODO add link to home page-->
+      <span>{{ titlePath | transloco }}</span>
+    </div>
 
-    <div class="spacer"></div>
-
-    @if (buttons) {
-      <ng-container *ngTemplateOutlet="buttons"/>
-    } @else {
-      @if (isLoggedIn) {
-        <div>
+    <div class="buttons">
+      @if (buttons) {
+        <ng-container *ngTemplateOutlet="buttons"/>
+      }
+      @if (!buttons || mergeButtons) {
+        @if (isLoggedIn) {
           <button mat-icon-button [matMenuTriggerFor]="userMenu" id="user-menu-button">
             <ngx-avatars
               name="{{ userName }}"
@@ -23,18 +24,18 @@
               [round]="true"
             ></ngx-avatars>
           </button>
-        </div>
 
-        <mat-menu #userMenu="matMenu">
-          <button mat-menu-item routerLink="/logout">
-            <mat-icon>logout</mat-icon>
-            <span>{{ `${TOOLBAR_PATH}.logoutButton` | transloco }}</span>
-          </button>
-        </mat-menu>
-      } @else {
-        <button mat-button routerLink="/register">{{ `${TOOLBAR_PATH}.registerButton` | transloco }}</button>
-        <button mat-button routerLink="/login">{{ `${TOOLBAR_PATH}.loginButton` | transloco }}</button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item routerLink="/logout">
+              <mat-icon>logout</mat-icon>
+              <span>{{ `${TOOLBAR_PATH}.logoutButton` | transloco }}</span>
+            </button>
+          </mat-menu>
+        } @else {
+          <button mat-button routerLink="/register">{{ `${TOOLBAR_PATH}.registerButton` | transloco }}</button>
+          <button mat-button routerLink="/login">{{ `${TOOLBAR_PATH}.loginButton` | transloco }}</button>
+        }
       }
-    }
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>

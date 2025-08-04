@@ -1,13 +1,30 @@
 <ng-template #toolbarButtons>
+  <button *ngIf="filterForm" mat-icon-button
+          [matMenuTriggerFor]="filterMenu">
+    <mat-icon>filter_list</mat-icon>
+  </button>
+  <mat-menu #filterMenu="matMenu">
+    <form [formGroup]="filterForm">
+      <mat-checkbox formControlName="all" (click)="$event.stopPropagation(); filterTherapists(filterForm.value.all)">
+        {{ `${OVERVIEW_PATH}.filters.all` | transloco }}
+      </mat-checkbox>
+      @for (status of RequestStatus; track status) {
+        <mat-checkbox [formControlName]="status" (click)="$event.stopPropagation(); filterTherapists()">
+          <app-request-chip [value]="status"/>
+        </mat-checkbox>
+      }
+    </form>
+  </mat-menu>
+</ng-template>
+
+<ng-template #toolbarMultiSelectButtons>
   <button mat-icon-button
-          [matMenuTriggerFor]="contextMenu"
-          (mousedown)="$event.stopPropagation()">
+          [matMenuTriggerFor]="contextMenu">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #contextMenu="matMenu">
     <button mat-menu-item
-            (click)="onDeleteClicked()"
-            (mousedown)="$event.stopPropagation()">
+            (click)="onDeleteClicked()">
       <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
     </button>
   </mat-menu>
@@ -15,7 +32,7 @@
 
 
 <div class="grid">
-  @for (therapist of therapists; track therapist) {
+  @for (therapist of filteredTherapists; track therapist) {
     <app-card appLongPress [therapist]="therapist"
               (shortPress)="onCardClick(therapist)"
               (longPress)="onCardLongClick(therapist)"

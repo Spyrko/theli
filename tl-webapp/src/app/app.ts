@@ -20,6 +20,8 @@ export class App {
   toolbarButtons$?: Observable<TemplateRef<any>>;
   titlePath$?: Observable<string>;
   showReturnArrow$?: Observable<boolean>;
+  mergeButtons$?: Observable<boolean>;
+
 
   constructor() {
   }
@@ -28,6 +30,7 @@ export class App {
     this.titlePath$ = component.titlePath$;
     this.showReturnArrow$ = component.showReturnArrow$;
     this.toolbarButtons$ = component.toolbarButtons$;
+    this.mergeButtons$ = component.mergeButtons$;
   }
 
   protected readonly APP_PATH = APP_PATH;
