@@ -11,6 +11,8 @@
       color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent));
   --mat-sys-divider-width: 2px; /* Default divider width */
   --divider-color: var(--mat-sys-divider-color, var(--mat-sys-on-surface-variant)); /* Default divider color */
+  --mat-toolbar-standard-height: 64px;
+  --mat-toolbar-mobile-height: 56px;
 }
 
 .mat-divider {
@@ -83,9 +85,24 @@ form {
   flex: 1;
 }
 
+app-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
 .container {
-  padding: 16px;
+  padding: var(--container-padding);
+  padding-top: calc(var(--container-padding) + var(--mat-toolbar-standard-height));
   flex: 1;
+}
+
+@media (max-width: 599px) {
+  .container {
+    padding-top: calc(var(--container-padding) + var(--mat-toolbar-mobile-height));
+  }
 }
 
 .container > :last-child {
@@ -105,10 +122,17 @@ form {
   height: 100%; /* Ensure the flex container takes full height */
 }
 
-.mat-mdc-icon-button {
-  padding: 0 !important; /* Remove padding for icon buttons */
+mat-form-field button {
+  padding: 0 !important;
   height: 24px !important; /* Set a fixed height */
   width: 24px !important; /* Set a fixed width */
+}
+
+.mat-mdc-icon-button {
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .mat-mdc-form-field-textarea-control {
@@ -187,4 +211,9 @@ mat-divider {
 .selected {
   --mat-sys-on-surface-container: var(--mat-sys-on-primary-container);
   --mat-sys-surface-container-low: var(--mat-sys-primary-container);
+}
+
+.mat-mdc-menu-content form {
+  flex-direction: column;
+  gap: 0;
 }

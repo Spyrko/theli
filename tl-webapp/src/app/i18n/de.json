@@ -65,6 +65,9 @@
         "title": "Löschen bestätigen",
         "message": "Möchten sie die ausgewählten {{count}} Therapeuten wirklich löschen?",
         "confirm": "Löschen"
+      },
+      "filters": {
+        "all": "Alle"
       }
     }
   },

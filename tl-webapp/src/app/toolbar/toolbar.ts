@@ -45,6 +45,9 @@ export class Toolbar {
   @Input()
   buttons: TemplateRef<any> | null = null;
 
+  @Input()
+  mergeButtons: boolean | null = null;
+
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }

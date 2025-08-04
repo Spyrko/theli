@@ -11,6 +11,7 @@ export abstract class ToolbarDataProvider {
   toolbarButtons$ = new ReplaySubject<TemplateRef<any> | null>(1)
   titlePath$ = new ReplaySubject<string | null>(1);
   showReturnArrow$ = new ReplaySubject<boolean>(1);
+  mergeButtons$ = new ReplaySubject<boolean>(1);
 
   set showReturnArrow(show: boolean) {
     this.showReturnArrow$.next(show);
@@ -18,5 +19,9 @@ export abstract class ToolbarDataProvider {
 
   set titlePath(path: string | null) {
     this.titlePath$.next(path);
+  }
+
+  set mergeButtons(merge: boolean) {
+    this.mergeButtons$.next(merge);
   }
 }
