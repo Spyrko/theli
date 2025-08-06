@@ -14,12 +14,12 @@ export class LongPressDirective implements OnDestroy {
   @HostListener('touchstart', ['$event'])
   onPressStart(event: MouseEvent | TouchEvent) {
     this.pressTimeoutId = setTimeout(() => {
+      this.pressTimeoutId = null;
       this.longPress.emit(event);
     }, this.duration);
   }
 
   @HostListener('mouseup')
-  @HostListener('mouseleave')
   @HostListener('touchend')
   @HostListener('touchcancel')
   onPressEndHandler() {
