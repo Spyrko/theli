@@ -3,11 +3,6 @@
   width: 36px !important;
 }
 
-.buttons button {
-  height: 36px !important;
-  width: 36px !important;
-}
-
 .mat-toolbar-row {
   gap: 8px;
   justify-content: space-between;

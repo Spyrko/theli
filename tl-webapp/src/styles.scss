@@ -122,17 +122,13 @@ app-toolbar {
   height: 100%; /* Ensure the flex container takes full height */
 }
 
-mat-form-field button {
-  padding: 0 !important;
-  height: 24px !important; /* Set a fixed height */
-  width: 24px !important; /* Set a fixed width */
-}
-
 .mat-mdc-icon-button {
   padding: 0 !important;
   display: flex !important;
   justify-content: center;
   align-items: center;
+  width: max-content !important;
+  height: max-content !important;
 }
 
 .mat-mdc-form-field-textarea-control {
@@ -145,10 +141,12 @@ mat-divider {
   background-color: var(--mat-sys-on-background, rgba(0, 0, 0, 0.12)); /* Use the default divider color */
 }
 
+.buttons .mat-mdc-icon-button {
+  padding: 8px !important;
+}
+
 
 .mat-form-field-disabled {
-  /* give the entire field a background */
-
   padding-top: 4px !important;
 
   .mat-mdc-text-field-wrapper {
