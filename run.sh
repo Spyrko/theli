@@ -12,5 +12,7 @@ elif command -v start > /dev/null; then
   start "$URL"
 else
   echo "No suitable command found to open the URL."
+  echo "Please open the following URL in your browser:"
+  echo "$URL"
   exit 1
 fi
