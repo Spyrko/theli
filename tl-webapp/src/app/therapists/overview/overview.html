@@ -5,15 +5,40 @@
   </button>
   <mat-menu #filterMenu="matMenu">
     <form [formGroup]="filterForm">
-      <mat-checkbox formControlName="all" (click)="$event.stopPropagation(); filterTherapists(filterForm.value.all)">
-        {{ `${OVERVIEW_PATH}.filters.all` | transloco }}
-      </mat-checkbox>
-      @for (status of RequestStatus; track status) {
-        <mat-checkbox [formControlName]="status" (click)="$event.stopPropagation(); filterTherapists()">
-          <app-request-chip [value]="status"/>
+      <button mat-menu-item (click)="$event.stopPropagation(); toggleCheckbox('all'); filterTherapists(filterForm.value.all);">
+        <mat-checkbox formControlName="all" style="pointer-events: none;">
+          {{ `${OVERVIEW_PATH}.filters.all` | transloco }}
         </mat-checkbox>
+      </button>
+      @for (status of RequestStatus; track status) {
+        <button mat-menu-item (click)="$event.stopPropagation(); toggleCheckbox(status); filterTherapists()">
+          <mat-checkbox [formControlName]="status">
+            <app-request-chip [value]="status"/>
+          </mat-checkbox>
+        </button>
       }
     </form>
+  </mat-menu>
+  <button mat-icon-button
+          [matMenuTriggerFor]="sortMenu">
+    <mat-icon>sort</mat-icon>
+  </button>
+  <mat-menu #sortMenu="matMenu">
+    <button mat-menu-item
+            (click)="sortBy(SortingAlgorithm.RELEVANCE)"
+            [ngClass]="{ selected: sortingAlgorithm === SortingAlgorithm.RELEVANCE }">
+      <span>{{ `${OVERVIEW_PATH}.sort.relevance` | transloco }}</span>
+    </button>
+    <button mat-menu-item
+            (click)="sortBy(SortingAlgorithm.NAME)"
+            [ngClass]="{ selected: sortingAlgorithm === SortingAlgorithm.NAME }">
+      <span>{{ `${OVERVIEW_PATH}.sort.name` | transloco }}</span>
+    </button>
+    <button mat-menu-item
+            (click)="sortBy(SortingAlgorithm.STATUS)"
+            [ngClass]="{ selected: sortingAlgorithm === SortingAlgorithm.STATUS }">
+      <span>{{ `${OVERVIEW_PATH}.sort.requestStatus` | transloco }}</span>
+    </button>
   </mat-menu>
 </ng-template>
 
@@ -32,7 +57,7 @@
 
 
 <div class="grid">
-  @for (therapist of filteredTherapists; track therapist) {
+  @for (therapist of therapists$ | async; track therapist) {
     <app-card appLongPress [therapist]="therapist"
               (shortPress)="onCardClick(therapist)"
               (longPress)="onCardLongClick(therapist)"
