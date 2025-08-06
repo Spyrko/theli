@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -36,7 +36,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
-export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
+export class Overview extends ToolbarDataProvider implements OnInit, AfterViewInit, OnDestroy {
   therapists: TherapistCardTs[] = []
   filteredTherapists: TherapistCardTs[] = [];
 
@@ -47,13 +47,13 @@ export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
 
   toolbarButtons: TemplateRef<any> | null = null;
 
+
   @ViewChild('toolbarMultiSelectButtons')
   multiSelectButtons!: TemplateRef<any>;
 
   filterForm!: FormGroup;
 
   override set buttons(value: TemplateRef<any> | null) {
-    super.buttons = value;
     this.toolbarButtons = value;
   }
 
@@ -69,9 +69,11 @@ export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
     this.initFilterForm(true);
   }
 
+  ngAfterViewInit(): void {
+    this.updateToolbar();
+  }
+
   private initFilterForm(value: boolean): void {
-
-
     if (!this.filterForm) {
       const savedFilterOptions = sessionStorage.getItem('therapists.filterOptions');
       if (savedFilterOptions) {
@@ -99,9 +101,11 @@ export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
     this.subscriptions.push(this.route.queryParamMap.subscribe(params => {
         const newMode = !!params.get('multiSelect');
         if (newMode !== this.multiSelectMode) {
-          this.selectedTherapists = [];
           this.multiSelectMode = newMode;
           this.updateToolbar();
+          if (!newMode) {
+            this.selectedTherapists = [];
+          }
         }
       })
     );
@@ -126,6 +130,7 @@ export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
     if (this.multiSelectMode) {
       this.onCardClick(therapist);
     } else {
+      this.selectedTherapists.push(therapist);
       this.router.navigate([], {
         queryParams: {multiSelect: true},
         queryParamsHandling: 'merge',
@@ -153,7 +158,6 @@ export class Overview extends ToolbarDataProvider implements OnInit, OnDestroy {
       this.therapists = therapists;
       this.filterTherapists();
     })
-    this.updateToolbar();
   }
 
   protected readonly CARD_PATH = CARD_PATH;
