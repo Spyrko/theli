@@ -6,15 +6,17 @@ export function timeStringToDate(time?: string): DateTime | undefined {
   if (!time) {
     return undefined;
   }
-  return DateTime.fromFormat(time, "HH:mm", {zone: 'utc'});
+  return DateTime.fromFormat(time, "HH:mm", {zone: 'de-DE'});
 }
 
 export function dateToTimeString(date?: DateTime): string {
   if (!date) {
     return '';
   }
-  const hours = date.hour.toString().padStart(2, '0');
-  const minutes = date.minute.toString().padStart(2, '0');
+
+  const localDateTime = date.setZone('local');
+  const hours = localDateTime.hour.toString().padStart(2, '0');
+  const minutes = localDateTime.minute.toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 }
 
@@ -27,15 +29,11 @@ export function dateTimeInterceptor(req: HttpRequest<any>, next: HttpHandlerFn):
       }
       return event;
     })
-  );
+  )
 }
 
 function convertToDateTime(obj: any): any {
   if (obj === null || obj === undefined) return obj;
-
-  if (typeof obj === 'string' && isIsoDate(obj)) {
-    return DateTime.fromISO(obj, {zone: 'utc'});
-  }
 
   if (Array.isArray(obj)) {
     return obj.map(value => convertToDateTime(value));
@@ -44,15 +42,17 @@ function convertToDateTime(obj: any): any {
   if (typeof obj === 'object') {
     const newObj: any = {};
     for (const key in obj) {
+      if (key === 'openingTime' || key === 'closingTime') {
+        newObj[key] = obj[key] ? DateTime.fromISO(obj[key]) : undefined;
+        continue;
+      } else if (key === 'waitingTime') {
+        newObj[key] = obj[key] ? new Date(obj[key]) : undefined;
+        continue;
+      }
       newObj[key] = convertToDateTime(obj[key]);
     }
     return newObj;
   }
 
   return obj;
-}
-
-function isIsoDate(value: string): boolean {
-  // Checks for ISO 8601 date strings like 2025-07-21T13:00:00Z
-  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/.test(value);
 }

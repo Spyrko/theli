@@ -141,8 +141,8 @@ mat-divider {
   background-color: var(--mat-sys-on-background, rgba(0, 0, 0, 0.12)); /* Use the default divider color */
 }
 
-.buttons .mat-mdc-icon-button {
-  padding: 8px !important;
+mat-toolbar .mat-mdc-icon-button {
+  padding: 6px !important;
 }
 
 
@@ -206,6 +206,22 @@ mat-divider {
   padding-right: var(--container-padding) !important;
 }
 
+mat-card {
+  color: var(--mat-sys-on-surface-container, var(--mat-sys-on-surface)) !important;
+}
+
+.mat-mdc-menu-container {
+  color: var(--mat-menu-container-color, var(--mat-sys-on-surface-container, var(--mat-sys-on-surface)));
+}
+
+.mat-mdc-menu-item {
+  color: var(--mat-menu-item-label-text-color, var(--mat-sys-on-surface-container, var(--mat-sys-on-surface))) !important;
+}
+
+.mat-mdc-menu-item.selected {
+  background-color: var(--mat-sys-surface-container-low);
+}
+
 .selected {
   --mat-sys-on-surface-container: var(--mat-sys-on-primary-container);
   --mat-sys-surface-container-low: var(--mat-sys-primary-container);
@@ -214,4 +230,8 @@ mat-divider {
 .mat-mdc-menu-content form {
   flex-direction: column;
   gap: 0;
+}
+
+button mat-checkbox {
+  pointer-events: none;
 }

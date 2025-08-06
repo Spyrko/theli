@@ -1,5 +1,4 @@
 import { BusinessHours, RequestStatus } from 'shared';
-import { DateTime } from 'ts-luxon';
 
 export interface TherapistCardTs {
   /**
@@ -10,12 +9,12 @@ export interface TherapistCardTs {
   /**
    * Status of the request to the therapist.
    */
-  requestStatus?: RequestStatus;
+  requestStatus: RequestStatus;
 
   /**
    * Waiting time for the therapist.
    */
-  waitingTime?: DateTime;
+  waitingTime?: Date;
 
   /**
    * Name of the therapist.

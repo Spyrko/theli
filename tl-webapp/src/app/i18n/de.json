@@ -68,6 +68,11 @@
       },
       "filters": {
         "all": "Alle"
+      },
+      "sort": {
+        "name": "Name",
+        "requestStatus": "Status",
+        "relevance": "Relevanz"
       }
     }
   },
