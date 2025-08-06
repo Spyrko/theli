@@ -1,5 +1,5 @@
 
-docker-compose build frontend backend
+docker compose build frontend backend
 docker compose up -d
 
 URL="http://localhost:4200"
