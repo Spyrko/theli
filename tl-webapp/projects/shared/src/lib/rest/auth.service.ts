@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getAccessToken();
+    return !!this.getAccessToken() || !!this.getRefreshToken();
   }
 
   logout(): void {
@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   getUserName(): string | null {
-    const token = this.getAccessToken();
+    const token = this.getAccessToken() || this.getRefreshToken();
     if (!token) {
       return null;
     }
