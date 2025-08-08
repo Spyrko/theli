@@ -1,7 +1,4 @@
-<app-toolbar [titlePath]="(titlePath$ | async) ?? `${APP_PATH}.title`"
-             [showReturnArrow]="showReturnArrow$ | async"
-             [buttons]="toolbarButtons$ | async"
-             [mergeButtons]="mergeButtons$ | async"/>
+<app-toolbar [config]="toolbarConfig"/>
 <div class="container">
   <router-outlet (activate)="onActivate($event)"/>
 </div>

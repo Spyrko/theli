@@ -42,19 +42,7 @@
   </mat-menu>
 </ng-template>
 
-<ng-template #toolbarMultiSelectButtons>
-  <button mat-icon-button
-          [matMenuTriggerFor]="contextMenu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #contextMenu="matMenu">
-    <button mat-menu-item
-            (click)="onDeleteClicked()">
-      <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
-    </button>
-  </mat-menu>
-</ng-template>
-
+<ng-container #toolbarOverride='toolbarOverride' toolbarOverride (finished)="onToolbarOverrideFinished($event)"/>
 
 <div class="grid">
   @for (therapist of therapists$ | async; track therapist) {
@@ -62,7 +50,7 @@
               (shortPress)="onCardClick(therapist)"
               (longPress)="onCardLongClick(therapist)"
               (updated)="reloadTherapists()"
-              [ngClass]="{ selected: selectedTherapists.includes(therapist)}"/>
+              [ngClass]="{ selected: multiSelectToolbarOverride?.selectedTherapists!.includes(therapist!)}"/>
   }
 </div>
 <button mat-fab color="primary" class="fab-button"

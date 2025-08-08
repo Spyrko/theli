@@ -1,19 +1,20 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CardComponent } from './card/card.component';
-import { ConfirmDialog, LongPressDirective, RequestChip, RequestStatus, TherapistCardTs, TherapistService } from 'shared';
-import { map, Observable, Subject, Subscription } from 'rxjs';
+import { LongPressDirective, RequestChip, RequestStatus, TherapistCardTs, TherapistService } from 'shared';
+import { map, Observable, skip, Subject, Subscription, take } from 'rxjs';
 import { AsyncPipe, Location, NgClass, NgIf } from '@angular/common';
 import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { TranslocoPipe } from '@ngneat/transloco';
-import { CARD_PATH, OVERVIEW_PATH } from '../../translation-paths';
-import { MatDialog } from '@angular/material/dialog';
+import { OVERVIEW_PATH } from '../../translation-paths';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { sortBy, SortingAlgorithm } from './card-sorting';
+import { FinishedEvent, ToolbarOverride } from './toolbar-override.directive';
+import { MultiSelectToolbarOverride } from './multi-select/multi-select.component';
 
 @Component({
   selector: 'app-overview',
@@ -33,22 +34,25 @@ import { sortBy, SortingAlgorithm } from './card-sorting';
     NgIf,
     ReactiveFormsModule,
     RequestChip,
-    AsyncPipe
+    AsyncPipe,
+    ToolbarOverride,
   ],
   templateUrl: './overview.html',
-  styleUrl: './overview.scss'
+  styleUrl: './overview.scss',
 })
-export class Overview extends ToolbarDataProvider implements OnInit, AfterViewInit, OnDestroy {
+export class Overview extends ToolbarDataProvider implements OnDestroy {
   therapistsSubject$: Subject<TherapistCardTs[]> = new Subject<TherapistCardTs[]>();
   therapists$: Observable<TherapistCardTs[]>;
   private _therapists: TherapistCardTs[] = [];
 
   subscriptions: Subscription[] = [];
 
-  multiSelectMode = false;
-  selectedTherapists: TherapistCardTs[] = [];
+  get multiSelectMode(): boolean {
+    return !!this.multiSelectToolbarOverride;
+  };
 
-  toolbarButtons: TemplateRef<any> | null = null;
+  @ViewChild('toolbarOverride', {read: ViewContainerRef, static: true})
+  toolbarOverride!: ViewContainerRef
 
   get sortingAlgorithm(): SortingAlgorithm | null {
     return sessionStorage.getItem('therapists.sortOptions') as SortingAlgorithm;
@@ -58,24 +62,16 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
     sessionStorage.setItem('therapists.sortOptions', value);
   }
 
-
-  @ViewChild('toolbarMultiSelectButtons')
-  multiSelectButtons!: TemplateRef<any>;
+  multiSelectToolbarOverride?: MultiSelectToolbarOverride;
 
   filterForm!: FormGroup;
-  private filterFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
+  private readonly filterFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
   private sortFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
-
-  override set buttons(value: TemplateRef<any> | null) {
-    this.toolbarButtons = value;
-  }
-
 
   constructor(private therapistService: TherapistService,
               private route: ActivatedRoute,
               private router: Router,
               private location: Location,
-              private dialog: MatDialog,
               private fb: FormBuilder) {
     super();
     this.reloadTherapists();
@@ -87,10 +83,36 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
       this.filterForm.value[therapist.requestStatus as keyof typeof this.filterForm.value]
     );
     this.sortBy(this.sortingAlgorithm ?? SortingAlgorithm.RELEVANCE);
+    this.mergeButtons = true;
+    this.route.queryParamMap.pipe(take(1)).subscribe(params => {
+      if (!!params.get('mode')) {
+        this.location.back();
+      }
+    });
+    this.subscriptions.push(this.route.queryParamMap.pipe(skip(1)).subscribe(params => {
+        this.clearToolbarOverride();
+        switch (params.get('mode')) {
+          case 'multiSelect':
+            this.multiSelectToolbarOverride = this.createToolbarOverride(MultiSelectToolbarOverride)
+            return;
+          default:
+            return;
+        }
+      })
+    );
   }
 
-  ngAfterViewInit(): void {
-    this.updateToolbar();
+  private clearToolbarOverride() {
+    this.toolbarOverride.clear()
+    this.multiSelectToolbarOverride = undefined;
+  }
+
+  private createToolbarOverride<T extends ToolbarOverride<any>>(component: { new(...args: any[]): T }): T {
+    const override = this.toolbarOverride.createComponent(component).instance;
+    override.finished.subscribe(this.onToolbarOverrideFinished.bind(this))
+    override.configChange.subscribe(($event) => this.configChange.emit($event))
+    override.parentToolbarSettings = this.config;
+    return override;
   }
 
   private initFilterForm(value: boolean): void {
@@ -117,30 +139,10 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  ngOnInit(): void {
-    this.subscriptions.push(this.route.queryParamMap.subscribe(params => {
-        const newMode = !!params.get('multiSelect');
-        if (newMode !== this.multiSelectMode) {
-          this.multiSelectMode = newMode;
-          this.updateToolbar();
-          if (!newMode) {
-            this.selectedTherapists = [];
-          }
-        }
-      })
-    );
-  }
 
   onCardClick(therapist: TherapistCardTs): void {
     if (this.multiSelectMode) {
-      if (this.selectedTherapists.includes(therapist)) {
-        this.selectedTherapists = this.selectedTherapists.filter(t => t !== therapist);
-        if (this.selectedTherapists.length === 0) {
-          this.location.back()
-        }
-      } else {
-        this.selectedTherapists.push(therapist);
-      }
+      this.multiSelectToolbarOverride?.toggleTherapist(therapist);
     } else {
       this.router.navigate([therapist.id], {relativeTo: this.route});
     }
@@ -150,23 +152,10 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
     if (this.multiSelectMode) {
       this.onCardClick(therapist);
     } else {
-      this.selectedTherapists.push(therapist);
       this.router.navigate([], {
-        queryParams: {multiSelect: true},
+        queryParams: {mode: 'multiSelect'},
         queryParamsHandling: 'merge',
-      });
-    }
-  }
-
-  updateToolbar(): void {
-    this.titlePath = this.multiSelectMode ? '' : null;
-    this.showReturnArrow = this.multiSelectMode;
-    if (this.multiSelectMode) {
-      this.mergeButtons = false;
-      this.toolbarButtons$.next(this.multiSelectButtons);
-    } else {
-      this.mergeButtons = true;
-      this.toolbarButtons$.next(this.toolbarButtons);
+      }).then(() => this.multiSelectToolbarOverride?.toggleTherapist(therapist));
     }
   }
 
@@ -177,29 +166,6 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
     this.therapistService.getTherapists().then((therapists) => {
       this.setTherapists(therapists);
     })
-  }
-
-  protected readonly CARD_PATH = CARD_PATH;
-
-  onDeleteClicked(): void {
-    const dialogRef = this.dialog.open(ConfirmDialog, {
-      data: {
-        titlePath: OVERVIEW_PATH + ".deleteConfirm.title",
-        messagePath: OVERVIEW_PATH + ".deleteConfirm.message",
-        messageParams: {count: this.selectedTherapists.length},
-        confirmButtonPath: OVERVIEW_PATH + ".deleteConfirm.confirm",
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.therapistService.deleteTherapists(this.selectedTherapists.map(t => t.id)
-          .filter((id): id is number => id !== undefined))
-          .then(() => {
-            this.reloadTherapists()
-          })
-      }
-    });
   }
 
   protected readonly RequestStatus = Object.values(RequestStatus);
@@ -226,6 +192,23 @@ export class Overview extends ToolbarDataProvider implements OnInit, AfterViewIn
 
   toggleCheckbox(fieldName: string) {
     this.filterForm.controls[fieldName].patchValue(!this.filterForm.value[fieldName]);
+  }
+
+  deleteTherapists(therapists: TherapistCardTs[]) {
+    this.therapistService.deleteTherapists(therapists.map(t => t.id)
+      .filter((id): id is number => id !== undefined))
+      .then(() => {
+        this.reloadTherapists()
+      })
+  }
+
+  onToolbarOverrideFinished($event?: FinishedEvent) {
+    if (this.multiSelectMode) {
+      if ($event && 'delete' in $event) {
+        this.deleteTherapists($event['delete'])
+      }
+    }
+    this.location.back();
   }
 
   private setTherapists(therapists = this._therapists): void {

@@ -1,9 +1,8 @@
-import { Component, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { RouterOutlet } from "@angular/router";
 import { APP_PATH } from './translation-paths';
-import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
-import { Toolbar } from './toolbar/toolbar';
+import { Toolbar, ToolbarConfiguration } from './toolbar/toolbar';
+import { ToolbarDataProvider } from './toolbar/toolbar-data-provider.directive';
 
 
 @Component({
@@ -11,27 +10,35 @@ import { Toolbar } from './toolbar/toolbar';
   templateUrl: './app.html',
   imports: [
     RouterOutlet,
-    AsyncPipe,
     Toolbar
   ],
   styleUrl: './app.scss'
 })
 export class App {
-  toolbarButtons$?: Observable<TemplateRef<any>>;
-  titlePath$?: Observable<string>;
-  showReturnArrow$?: Observable<boolean>;
-  mergeButtons$?: Observable<boolean>;
 
-
-  constructor() {
+  defaultToolbarConfig: ToolbarConfiguration = {
+    titlePath: `${APP_PATH}.title`,
+    showReturnArrow: false,
+    mergeButtons: false,
   }
 
-  onActivate(component: any) {
-    this.titlePath$ = component.titlePath$;
-    this.showReturnArrow$ = component.showReturnArrow$;
-    this.toolbarButtons$ = component.toolbarButtons$;
-    this.mergeButtons$ = component.mergeButtons$;
+  toolbarConfig: ToolbarConfiguration = this.defaultToolbarConfig;
+
+
+  constructor(private cdr: ChangeDetectorRef) {
   }
+
 
   protected readonly APP_PATH = APP_PATH;
+
+  onToolbarConfigChanged($event: ToolbarConfiguration) {
+    this.toolbarConfig = {...this.defaultToolbarConfig, ...$event};
+    this.cdr.detectChanges()
+  }
+
+  onActivate($event: any) {
+    if ($event instanceof ToolbarDataProvider) {
+      $event.configChange.subscribe(this.onToolbarConfigChanged.bind(this))
+    }
+  }
 }

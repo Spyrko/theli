@@ -1,21 +1,21 @@
 <mat-toolbar>
   <mat-toolbar-row>
     <div>
-      @if (showReturnArrow) {
+      @if (config.showReturnArrow) {
         <button mat-icon-button (click)="onReturnArrowClick()" id="back-button">
           <mat-icon>arrow_back</mat-icon>
         </button>
       }
 
       <!--    TODO add link to home page-->
-      <span>{{ titlePath | transloco }}</span>
+      <span>{{ (config.titlePath || '') | transloco }}</span>
     </div>
 
     <div class="buttons">
-      @if (buttons) {
-        <ng-container *ngTemplateOutlet="buttons"/>
+      @if (config.buttons) {
+        <ng-container *ngTemplateOutlet="config.buttons"/>
       }
-      @if (!buttons || mergeButtons) {
+      @if (!config.buttons || config.mergeButtons) {
         @if (isLoggedIn) {
           <div style="width: 12px"></div>
           <button mat-icon-button [matMenuTriggerFor]="userMenu" id="user-menu-button">
