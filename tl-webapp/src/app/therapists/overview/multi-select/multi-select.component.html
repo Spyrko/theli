@@ -1,0 +1,12 @@
+<ng-template #toolbarButtons>
+  <button mat-icon-button
+          [matMenuTriggerFor]="contextMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #contextMenu="matMenu">
+    <button mat-menu-item
+            (click)="onDeleteClicked()">
+      <span>{{ `${CARD_PATH}.buttons.delete` | transloco }}</span>
+    </button>
+  </mat-menu>
+</ng-template>

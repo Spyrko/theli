@@ -1,27 +1,44 @@
-import { Directive, TemplateRef, ViewChild } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Directive, EventEmitter, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ToolbarConfiguration } from './toolbar';
 
-@Directive()
-export abstract class ToolbarDataProvider {
+@Directive({
+  selector: '[toolbarDataProvider]'
+})
+export class ToolbarDataProvider {
   @ViewChild('toolbarButtons')
   protected set buttons(buttons: TemplateRef<any> | null) {
-    this.toolbarButtons$.next(buttons);
+    if (this.config.buttons !== buttons) {
+      this.toolbarButtons = buttons;
+    }
   }
 
-  toolbarButtons$ = new ReplaySubject<TemplateRef<any> | null>(1)
-  titlePath$ = new ReplaySubject<string | null>(1);
-  showReturnArrow$ = new ReplaySubject<boolean>(1);
-  mergeButtons$ = new ReplaySubject<boolean>(1);
+  @Output()
+  configChange = new EventEmitter<ToolbarConfiguration>
 
-  set showReturnArrow(show: boolean) {
-    this.showReturnArrow$.next(show);
+  set config(config: ToolbarConfiguration) {
+    this._config = config;
+    this.configChange.emit(config)
   }
 
-  set titlePath(path: string | null) {
-    this.titlePath$.next(path);
+  get config(): ToolbarConfiguration {
+    return {...this._config};
   }
 
-  set mergeButtons(merge: boolean) {
-    this.mergeButtons$.next(merge);
+  private _config: ToolbarConfiguration = {};
+
+  set showReturnArrow(showReturnArrow: boolean | undefined) {
+    this.config = {...this._config, showReturnArrow}
+  }
+
+  set titlePath(titlePath: string | undefined) {
+    this.config = {...this._config, titlePath}
+  }
+
+  set mergeButtons(mergeButtons: boolean | undefined) {
+    this.config = {...this._config, mergeButtons}
+  }
+
+  set toolbarButtons(buttons: TemplateRef<any> | undefined | null) {
+    this.config = {...this._config, buttons: buttons || undefined}
   }
 }

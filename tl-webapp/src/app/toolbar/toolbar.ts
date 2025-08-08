@@ -10,6 +10,13 @@ import { MatIcon } from '@angular/material/icon';
 import { AvatarModule } from 'ngx-avatars';
 import { Location, NgTemplateOutlet } from '@angular/common';
 
+export type ToolbarConfiguration = {
+  showReturnArrow?: boolean;
+  titlePath?: string;
+  buttons?: TemplateRef<any>;
+  mergeButtons?: boolean;
+}
+
 @Component({
   selector: 'app-toolbar',
   imports: [
@@ -30,23 +37,21 @@ import { Location, NgTemplateOutlet } from '@angular/common';
   styleUrl: './toolbar.css'
 })
 export class Toolbar {
+  get config(): ToolbarConfiguration {
+    return this._config;
+  }
+
+  @Input()
+  set config(value: ToolbarConfiguration) {
+    this._config = value;
+  }
 
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;
 
   constructor(private authService: AuthService, private location: Location) {
   }
 
-  @Input()
-  showReturnArrow: boolean | null = null;
-
-  @Input()
-  titlePath!: string;
-
-  @Input()
-  buttons: TemplateRef<any> | null = null;
-
-  @Input()
-  mergeButtons: boolean | null = null;
+  private _config: ToolbarConfiguration = {};
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
