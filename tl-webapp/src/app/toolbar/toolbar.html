@@ -1,6 +1,6 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <div>
+    <div class="title">
       @if (config.showReturnArrow) {
         <button mat-icon-button (click)="onReturnArrowClick()" id="back-button">
           <mat-icon>arrow_back</mat-icon>
@@ -9,6 +9,12 @@
 
       <!--    TODO add link to home page-->
       <span>{{ (config.titlePath || '') | transloco }}</span>
+    </div>
+
+    <div class="center">
+      @if (config.center) {
+        <ng-container *ngTemplateOutlet="config.center"/>
+      }
     </div>
 
     <div class="buttons">

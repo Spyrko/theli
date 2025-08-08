@@ -1,8 +1,8 @@
 import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
-import { ToolbarConfiguration } from '../../toolbar/toolbar';
+import { ToolbarDataProvider } from './toolbar-data-provider.directive';
+import { ToolbarConfiguration } from './toolbar';
 
-export type FinishedEvent = Record<string, any>
+export type FinishedEvent = Record<string, any> & { component: string }
 
 @Directive({
   selector: '[toolbarOverride]',

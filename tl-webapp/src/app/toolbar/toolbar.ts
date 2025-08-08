@@ -15,6 +15,7 @@ export type ToolbarConfiguration = {
   titlePath?: string;
   buttons?: TemplateRef<any>;
   mergeButtons?: boolean;
+  center?: TemplateRef<any>;
 }
 
 @Component({
@@ -34,7 +35,7 @@ export type ToolbarConfiguration = {
     NgTemplateOutlet
   ],
   templateUrl: './toolbar.html',
-  styleUrl: './toolbar.css'
+  styleUrl: './toolbar.scss'
 })
 export class Toolbar {
   get config(): ToolbarConfiguration {
@@ -44,6 +45,7 @@ export class Toolbar {
   @Input()
   set config(value: ToolbarConfiguration) {
     this._config = value;
+    console.log(value)
   }
 
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;

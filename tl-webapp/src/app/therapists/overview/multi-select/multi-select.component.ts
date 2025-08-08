@@ -6,9 +6,10 @@ import { CARD_PATH, OVERVIEW_PATH } from '../../../translation-paths';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog, TherapistCardTs } from 'shared';
-import { ToolbarOverride } from '../toolbar-override.directive';
+import { ToolbarOverride } from '../../../toolbar/toolbar-override.directive';
 
 type FinishedEvent = {
+  component: string;
   delete: TherapistCardTs[];
 }
 
@@ -62,7 +63,7 @@ export class MultiSelectToolbarOverride extends ToolbarOverride<FinishedEvent> {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.finished.emit({delete: this.selectedTherapists})
+        this.finished.emit({component: "multiSelect", delete: this.selectedTherapists})
       }
     });
   }

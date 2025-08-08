@@ -1,20 +1,22 @@
 import { Component, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CardComponent } from './card/card.component';
 import { LongPressDirective, RequestChip, RequestStatus, TherapistCardTs, TherapistService } from 'shared';
-import { map, Observable, skip, Subject, Subscription, take } from 'rxjs';
+import { filter, firstValueFrom, map, Observable, skip, Subject, Subscription, take } from 'rxjs';
 import { AsyncPipe, Location, NgClass, NgIf } from '@angular/common';
 import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { OVERVIEW_PATH } from '../../translation-paths';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { sortBy, SortingAlgorithm } from './card-sorting';
-import { FinishedEvent, ToolbarOverride } from './toolbar-override.directive';
 import { MultiSelectToolbarOverride } from './multi-select/multi-select.component';
+import { FinishedEvent, ToolbarOverride } from '../../toolbar/toolbar-override.directive';
+import { SearchToolbarOverride } from '../../toolbar/search/search.toolbar-override';
+import { Search } from '../../toolbar/search/search.component';
 
 @Component({
   selector: 'app-overview',
@@ -36,6 +38,7 @@ import { MultiSelectToolbarOverride } from './multi-select/multi-select.componen
     RequestChip,
     AsyncPipe,
     ToolbarOverride,
+    Search,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',
@@ -44,6 +47,8 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
   therapistsSubject$: Subject<TherapistCardTs[]> = new Subject<TherapistCardTs[]>();
   therapists$: Observable<TherapistCardTs[]>;
   private _therapists: TherapistCardTs[] = [];
+
+  protected searchControl = new FormControl();
 
   subscriptions: Subscription[] = [];
 
@@ -67,6 +72,8 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
   filterForm!: FormGroup;
   private readonly filterFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
   private sortFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
+  private searchFn: ( (cards: TherapistCardTs[]) => TherapistCardTs[] ) = (cards) => cards;
+  private searchString: string = '';
 
   constructor(private therapistService: TherapistService,
               private route: ActivatedRoute,
@@ -78,9 +85,13 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
     this.initFilterForm(true);
     this.therapists$ = this.therapistsSubject$.pipe(
       map((t) => this.filterFn(t)),
-      map((t) => this.sortFn(t)))
+      map((t) => this.sortFn(t)),
+      map((t) => this.searchFn(t)))
     this.filterFn = therapists => therapists.filter(therapist =>
       this.filterForm.value[therapist.requestStatus as keyof typeof this.filterForm.value]
+    );
+    this.searchFn = therapists => therapists.filter(therapist =>
+      new RegExp(this.searchString).test(therapist.name)
     );
     this.sortBy(this.sortingAlgorithm ?? SortingAlgorithm.RELEVANCE);
     this.mergeButtons = true;
@@ -94,6 +105,9 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
         switch (params.get('mode')) {
           case 'multiSelect':
             this.multiSelectToolbarOverride = this.createToolbarOverride(MultiSelectToolbarOverride)
+            return;
+          case 'search':
+            this.createToolbarOverride(SearchToolbarOverride).searchControl = this.searchControl
             return;
           default:
             return;
@@ -152,11 +166,23 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
     if (this.multiSelectMode) {
       this.onCardClick(therapist);
     } else {
-      this.router.navigate([], {
-        queryParams: {mode: 'multiSelect'},
-        queryParamsHandling: 'merge',
-      }).then(() => this.multiSelectToolbarOverride?.toggleTherapist(therapist));
+      this.setMode('multiSelect').then(() => this.multiSelectToolbarOverride?.toggleTherapist(therapist));
     }
+  }
+
+  private async setMode(mode: string): Promise<boolean> {
+    console.log(this.route.snapshot.queryParams['mode'])
+    if (this.route.snapshot.queryParams['mode']) {
+      this.location.back()
+
+      return firstValueFrom(this.router.events.pipe(filter(event => event instanceof NavigationEnd))).then(() => {
+        return this.setMode(mode)
+      });
+    }
+    return this.router.navigate([], {
+      queryParams: {mode: mode},
+      queryParamsHandling: 'merge',
+    });
   }
 
   reloadTherapists() {
@@ -203,12 +229,22 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
   }
 
   onToolbarOverrideFinished($event?: FinishedEvent) {
-    if (this.multiSelectMode) {
-      if ($event && 'delete' in $event) {
-        this.deleteTherapists($event['delete'])
-      }
+    switch ($event?.component) {
+      case "multiSelect":
+        if ('delete' in $event) {
+          this.deleteTherapists($event['delete'])
+        }
+        break;
+      case "search":
+        if ('search' in $event) {
+          this.onSearch($event['search'])
+        }
+        break;
+      default:
     }
-    this.location.back();
+    if (this.route.snapshot.queryParams['mode']) {
+      this.location.back();
+    }
   }
 
   private setTherapists(therapists = this._therapists): void {
@@ -218,4 +254,13 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
 
   protected readonly OVERVIEW_PATH = OVERVIEW_PATH;
   protected readonly SortingAlgorithm = SortingAlgorithm;
+
+  onSearchBtnClick() {
+    this.setMode('search')
+  }
+
+  onSearch(str: string) {
+    this.searchString = str;
+    this.setTherapists();
+  }
 }
