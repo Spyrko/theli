@@ -9,9 +9,26 @@
   align-items: center;
 }
 
-.mat-toolbar-row div {
+.mat-toolbar-row > div {
   display: inherit;
   align-items: inherit;
   gap: inherit;
+}
+
+.title, .buttons {
+  flex: 1 1 0;
+}
+
+.center {
+  flex: 3 1 0 !important;
+  justify-content: center;
+}
+
+.buttons {
+  justify-content: flex-end;
+}
+
+.title {
+  padding-right: 30px;
 }
 

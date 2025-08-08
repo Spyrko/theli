@@ -1,0 +1,48 @@
+:host {
+  width: 100%;
+}
+
+.search-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+}
+
+.search-box {
+  background-color: color-mix(in srgb, var(--mat-sys-secondary) 10%, transparent);
+  border: 1px solid;
+  border-color: var(--mat-sys-secondary);
+  border-right: 0;
+  border-radius: 40px 0 0 40px;
+  height: 40px;
+  max-width: 600px;
+  flex: 1;
+  box-sizing: border-box;
+  cursor: text;
+  align-items: center;
+  position: relative;
+  display: flex;
+  padding-left: 16px;
+}
+
+.search-box input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+button {
+  height: 40px;
+  background-color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-secondary);
+  border: 1px solid;
+  border-color: var(--mat-sys-secondary);
+  border-radius: 0 40px 40px 0;
+  width: 60px;
+  flex: 0 0 auto;
+  cursor: pointer;
+}

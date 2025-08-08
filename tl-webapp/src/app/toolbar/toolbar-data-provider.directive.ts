@@ -12,6 +12,13 @@ export class ToolbarDataProvider {
     }
   }
 
+  @ViewChild('toolbarCenter')
+  protected set center(center: TemplateRef<any> | null) {
+    if (this.config.center !== center) {
+      this.toolbarCenter = center;
+    }
+  }
+
   @Output()
   configChange = new EventEmitter<ToolbarConfiguration>
 
@@ -40,5 +47,9 @@ export class ToolbarDataProvider {
 
   set toolbarButtons(buttons: TemplateRef<any> | undefined | null) {
     this.config = {...this._config, buttons: buttons || undefined}
+  }
+
+  set toolbarCenter(center: TemplateRef<any> | undefined | null) {
+    this.config = {...this._config, center: center || undefined}
   }
 }

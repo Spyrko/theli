@@ -3,6 +3,30 @@
 
 @include mat.core();
 
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: 599px) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (min-width: 600px) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: 960px) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: 1280px) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1920px) {
+      @content;
+    }
+  }
+}
+
 :root {
   --min-width: 380px; /* Set a minimum width for form fields */
   --container-padding: 16px; /* Padding for the container */
@@ -11,8 +35,8 @@
       color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent));
   --mat-sys-divider-width: 2px; /* Default divider width */
   --divider-color: var(--mat-sys-divider-color, var(--mat-sys-on-surface-variant)); /* Default divider color */
-  --mat-toolbar-standard-height: 64px;
   --mat-toolbar-mobile-height: 56px;
+  --mat-toolbar-standard-height: var(--mat-toolbar-mobile-height);
 }
 
 .mat-divider {
@@ -123,7 +147,6 @@ app-toolbar {
 }
 
 .mat-mdc-icon-button {
-  padding: 0 !important;
   display: flex !important;
   justify-content: center;
   align-items: center;

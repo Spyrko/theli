@@ -1,5 +1,19 @@
+@use "../../../styles" as s;
+
 .grid {
   display: grid;
   gap: var(--default-gap);
   grid-template-columns: repeat(auto-fill, minmax(var(--min-width), 1fr));
+}
+
+#search-bar {
+  @include s.respond-to(xs) {
+    display: none !important;
+  }
+}
+
+#search-btn {
+  @include s.respond-to(sm) {
+    display: none !important;
+  }
 }

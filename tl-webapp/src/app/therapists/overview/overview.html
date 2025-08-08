@@ -1,4 +1,11 @@
+<ng-template #toolbarCenter>
+  <app-search [searchControl]="searchControl" (search)="onSearch($event)" id="search-bar"/>
+</ng-template>
+
 <ng-template #toolbarButtons>
+  <button mat-icon-button (click)="onSearchBtnClick()" id="search-btn">
+    <mat-icon>search</mat-icon>
+  </button>
   <button *ngIf="filterForm" mat-icon-button
           [matMenuTriggerFor]="filterMenu">
     <mat-icon>filter_list</mat-icon>

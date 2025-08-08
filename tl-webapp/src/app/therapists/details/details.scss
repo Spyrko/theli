@@ -1,3 +1,5 @@
+@use "../../../styles" as s;
+
 app-business-hours-list {
   display: flex;
   flex: 1;
@@ -20,7 +22,9 @@ textarea {
 .form-section:not(#notes-section) {
   flex: 1 1 var(--min-width);
   min-width: var(--min-width);
-  max-width: 450px;
+  @include s.respond-to(md) {
+    max-width: 450px;
+  }
 }
 
 .form-section {
@@ -37,12 +41,27 @@ textarea {
 }
 
 #notes-section {
-  flex: 1 1 400px;
-  min-width: 400px;
+  flex: 1 1 100%;
+  max-width: 100%;
+  min-width: 100%;
+  @include s.respond-to(md) {
+    flex-basis: 400px;
+    min-width: 400px;
+    max-width: unset;
+  }
+}
+
+#section-divider-vertical {
+  display: none;
+  @include s.respond-to(md) {
+    display: block;
+  }
 }
 
 #section-divider-horizontal {
-  display: none;
+  @include s.respond-to(md) {
+    display: none;
+  }
 }
 
 #notes {
@@ -68,25 +87,26 @@ textarea {
   pointer-events: none;
 }
 
-@media (max-width: 862px) {
-  #notes-section {
-    flex: 1 1 100%;
-    max-width: 100%;
-    min-width: 100%;
-  }
+//@media (max-width: 862px) {
+//@media (min-width: var(--breakpoint-md)) {
+//#notes-section {
+//  flex: 1 1 400px;
+//  min-width: 400px;
+//  max-width: unset;
+//}
 
-  #section-divider-horizontal {
-    display: block;
-  }
+//#section-divider-horizontal {
+//  display: none;
+//}
 
-  #section-divider-vertical {
-    display: none;
-  }
+//#section-divider-vertical {
+//  display: block;
+//}
 
-  .form-section:not(#notes-section) {
-    max-width: unset;
-  }
-}
+//.form-section:not(#notes-section) {
+//  max-width: 450px;
+//}
+//}
 
 input:disabled, textarea:disabled {
   color: var(--mat-sys-on-surface) !important;

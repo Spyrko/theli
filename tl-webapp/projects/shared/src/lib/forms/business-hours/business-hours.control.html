@@ -1,4 +1,4 @@
-<div role="group" class="bh-container" [formGroup]="parts" [attr.aria-labelledby]="parentFormField?.getLabelId()">
+<div role="group" class="bh-container" [formGroup]="parts" [attr.aria-labelledby]="parentFormField.getLabelId()">
   <mat-select #dayOfWeekSelect class="bh-day" formControlName="dayOfWeek"
               [placeholder]="`${BUSINESS_HOURS_PATH}.dayOfWeek.placeholder` | transloco"
   >

@@ -4,7 +4,8 @@
     "toolbar": {
       "loginButton": "Anmelden",
       "logoutButton": "Abmelden",
-      "registerButton": "Registrieren"
+      "registerButton": "Registrieren",
+      "search": "Suchen"
     },
     "login": {
       "title": "Anmelden",
