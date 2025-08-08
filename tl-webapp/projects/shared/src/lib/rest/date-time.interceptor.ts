@@ -6,7 +6,7 @@ export function timeStringToDate(time?: string): DateTime | undefined {
   if (!time) {
     return undefined;
   }
-  return DateTime.fromFormat(time, "HH:mm", {zone: 'de-DE'});
+  return DateTime.fromFormat(time, "HH:mm", {zone: 'local'});
 }
 
 export function dateToTimeString(date?: DateTime): string {
