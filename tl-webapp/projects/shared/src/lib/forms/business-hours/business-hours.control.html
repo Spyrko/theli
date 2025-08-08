@@ -21,7 +21,8 @@
       <ngx-mat-timepicker #openingPicker
                           [format]="24"
                           (timeSet)="setTime(openingInput, $event)"
-                          [max]="value?.closingTime || maxTime"/>
+                          [max]="value?.closingTime || maxTime"
+                          [minutesGap]="5"/>
 
     </div>
     <span class="bh-separator" [ngClass]="{'mdc-text-field__input': disabled}">&ndash;</span>
@@ -39,7 +40,8 @@
       <ngx-mat-timepicker #closingPicker
                           [format]="24"
                           (timeSet)="setTime(closingInput, $event)"
-                          [min]="value?.openingTime || minTime"/>
+                          [min]="value?.openingTime || minTime"
+                          [minutesGap]="5"/>
     </div>
   </div>
   @if (!disabled) {
