@@ -16,6 +16,7 @@ import de.chiworks.tlserver.security.JwtService;
 import de.chiworks.tlserver.security.model.Role;
 import de.chiworks.tlserver.security.model.entities.user.User;
 import de.chiworks.tlserver.security.model.entities.user.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 
@@ -83,14 +84,18 @@ public class AuthController {
     @PostMapping("/refresh")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> refresh(@Nonnull @RequestBody String token) {
-        var user = userRepo.findByUsername(jwtService.extractUsername(token))
-                           .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (!jwtService.isTokenValid(token, user)) {
-            return ResponseEntity.status(401).body("Invalid token");
-        }
-        revokeTokens(token, user);
+        try {
+            var user = userRepo.findByUsername(jwtService.extractUsername(token))
+                               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if (!jwtService.isTokenValid(token, user)) {
+                return ResponseEntity.status(401).body("Invalid token");
+            }
+            revokeTokens(token, user);
 
-        return ResponseEntity.ok(generateNewTokens(user));
+            return ResponseEntity.ok(generateNewTokens(user));
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(401).body("Token expired");
+        }
     }
 
     private AuthResponseTs generateNewTokens(@Nonnull User user) {
@@ -118,8 +123,12 @@ public class AuthController {
     @PostMapping("/logout")
     @PreAuthorize("permitAll()")
     public void logout(@Nonnull @RequestBody String token) {
-        var user = userRepo.findByUsername(jwtService.extractUsername(token))
-                           .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        revokeTokens(token, user);
+        try {
+            var user = userRepo.findByUsername(jwtService.extractUsername(token))
+                               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            revokeTokens(token, user);
+        } catch (ExpiredJwtException e) {
+            // just do nothing, because token already invalid
+        }
     }
 }
