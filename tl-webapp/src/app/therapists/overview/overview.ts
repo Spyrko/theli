@@ -5,7 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import { CardComponent } from './card/card.component';
 import { LongPressDirective, RequestChip, RequestStatus, TherapistCardTs, TherapistService } from 'shared';
 import { filter, firstValueFrom, map, Observable, skip, Subject, Subscription, take } from 'rxjs';
-import { AsyncPipe, Location, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, Location, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { TranslocoPipe } from '@ngneat/transloco';
@@ -39,6 +39,7 @@ import { Search } from '../../toolbar/search/search.component';
     AsyncPipe,
     ToolbarOverride,
     Search,
+    NgTemplateOutlet,
   ],
   templateUrl: './overview.html',
   styleUrl: './overview.scss',

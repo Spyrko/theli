@@ -1,10 +1,10 @@
 #user-menu-button {
-  height: 40px !important;
-  width: 40px !important;
+  height: var(--mat-sys-headline-large-line-height) !important;
+  width: var(--mat-sys-headline-large-line-height) !important;
 }
 
 .mat-toolbar-row {
-  gap: 4px;
+  gap: 0.25rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -29,6 +29,10 @@
 }
 
 .title {
-  padding-right: 30px;
+  padding-right: 1.875rem;
 }
 
+mat-toolbar .mat-mdc-icon-button {
+  height: var(--mat-sys-headline-medium-line-height);
+  width: var(--mat-sys-headline-medium-line-height);
+}

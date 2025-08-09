@@ -30,14 +30,14 @@ textarea {
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--default-gap);
 }
 
 .form-subsection {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--default-gap);
 }
 
 #notes-section {
@@ -64,10 +64,6 @@ textarea {
   }
 }
 
-#notes {
-  min-height: 200px;
-}
-
 .resizable-textarea {
   position: relative;
 }
@@ -79,34 +75,13 @@ textarea {
 .resizable-textarea:not(.mat-form-field-disabled)::after {
   content: '↓'; /* Symbol unten */
   position: absolute;
-  right: 8px;
-  bottom: 20px;
-  font-size: 14px;
+  right: 0.5rem;
+  bottom: 1.25rem;
+  font-size: 0.875rem;
   color: var(--mat-sys-on-surface-variant);
   user-select: none;
   pointer-events: none;
 }
-
-//@media (max-width: 862px) {
-//@media (min-width: var(--breakpoint-md)) {
-//#notes-section {
-//  flex: 1 1 400px;
-//  min-width: 400px;
-//  max-width: unset;
-//}
-
-//#section-divider-horizontal {
-//  display: none;
-//}
-
-//#section-divider-vertical {
-//  display: block;
-//}
-
-//.form-section:not(#notes-section) {
-//  max-width: 450px;
-//}
-//}
 
 input:disabled, textarea:disabled {
   color: var(--mat-sys-on-surface) !important;

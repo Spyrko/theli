@@ -17,7 +17,7 @@
       @content;
     }
   } @else if $breakpoint == lg {
-    @media (min-width: 1280px) {
+    @media (min-width: 1200px) {
       @content;
     }
   } @else if $breakpoint == xl {
@@ -28,14 +28,14 @@
 }
 
 :root {
-  --min-width: 380px; /* Set a minimum width for form fields */
-  --container-padding: 16px; /* Padding for the container */
-  --default-gap: 16px; /* Default gap for flex items */
+  --min-width: 24rem; /* Set a minimum width for form fields */
+  --container-padding: 1rem; /* Padding for the container */
+  --default-gap: 1rem; /* Default gap for flex items */
   --disabled-on-surface: var(
       color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent));
-  --mat-sys-divider-width: 2px; /* Default divider width */
+  --mat-sys-divider-width: 0.125rem; /* Default divider width */
   --divider-color: var(--mat-sys-divider-color, var(--mat-sys-on-surface-variant)); /* Default divider color */
-  --mat-toolbar-mobile-height: 56px;
+  --mat-toolbar-mobile-height: 3.5rem;
   --mat-toolbar-standard-height: var(--mat-toolbar-mobile-height);
 }
 
@@ -60,6 +60,13 @@ app-root {
 html, body {
   height: 100%;
   background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface-container);
+  caret-color: var(--mat-sys-on-surface-container);
+}
+
+input {
+  color: inherit;
+  caret-color: inherit;
 }
 
 body {
@@ -75,8 +82,8 @@ body {
 
 .fab-button {
   position: fixed !important;
-  bottom: 16px !important; /* Abstand vom unteren Rand */
-  right: 16px !important; /* Abstand vom rechten Rand */
+  bottom: var(--container-padding) !important; /* Abstand vom unteren Rand */
+  right: var(--container-padding) !important; /* Abstand vom rechten Rand */
   z-index: 1000 !important; /* Damit der Button immer oben liegt */
 }
 
@@ -104,7 +111,7 @@ form {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--default-gap);
   height: auto;
   flex: 1;
 }
@@ -121,10 +128,8 @@ app-toolbar {
   padding: var(--container-padding);
   padding-top: calc(var(--container-padding) + var(--mat-toolbar-standard-height));
   flex: 1;
-}
 
-@media (max-width: 599px) {
-  .container {
+  @include respond-to(xs) {
     padding-top: calc(var(--container-padding) + var(--mat-toolbar-mobile-height));
   }
 }
@@ -161,20 +166,15 @@ app-toolbar {
 mat-divider {
   width: 100%;
   height: 1px;
-  background-color: var(--mat-sys-on-background, rgba(0, 0, 0, 0.12)); /* Use the default divider color */
+  background-color: var(--mat-sys-on-background, rgba(0, 0, 0, 0.12));
 }
-
-mat-toolbar .mat-mdc-icon-button {
-  padding: 6px !important;
-}
-
 
 .mat-form-field-disabled {
-  padding-top: 4px !important;
+  padding-top: 0.25rem !important;
 
   .mat-mdc-text-field-wrapper {
-    background-color: transparent !important; /* light grey background */
-    border-radius: 4px;
+    background-color: transparent !important;
+    border-radius: 0.25rem;
     padding-top: 0;
     padding-bottom: 0;
   }
@@ -250,11 +250,11 @@ mat-card {
   --mat-sys-surface-container-low: var(--mat-sys-primary-container);
 }
 
-.mat-mdc-menu-content form {
-  flex-direction: column;
-  gap: 0;
-}
-
 button mat-checkbox {
   pointer-events: none;
+}
+
+.mat-mdc-menu-content form {
+  flex-direction: column !important;
+  gap: 0 !important;
 }

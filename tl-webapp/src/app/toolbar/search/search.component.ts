@@ -27,6 +27,7 @@ export class Search {
   }
 
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;
+  focused: boolean = false;
 
   onEnterPressed(element: HTMLInputElement) {
     element.blur()
