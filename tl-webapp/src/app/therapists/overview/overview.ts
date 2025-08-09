@@ -131,23 +131,20 @@ export class Overview extends ToolbarDataProvider implements OnDestroy {
   }
 
   private initFilterForm(value: boolean): void {
-    if (!this.filterForm) {
-      const savedFilterOptions = sessionStorage.getItem('therapists.filterOptions');
-      if (savedFilterOptions) {
-        this.filterForm = this.fb.group(JSON.parse(savedFilterOptions));
-        return;
-      }
-    }
 
-    const requestStatuses = Object.values(RequestStatus) as RequestStatus[];
-    const requestStatusFormValues: Record<RequestStatus, boolean[]> = requestStatuses.reduce((acc, val) => {
-      acc[val] = [value];
-      return acc;
-    }, {} as Record<RequestStatus, boolean[]>);
-    this.filterForm = this.fb.group({
-      all: [value],
-      ...requestStatusFormValues
+    const defaultFilterOptions: any = {
+      all: value
+    }
+    Object.values(RequestStatus).forEach(status => {
+      defaultFilterOptions[status] = value;
     });
+
+    if (!this.filterForm) {
+      const savedFilterOptions = sessionStorage.getItem('therapists.filterOptions') || '{}';
+      this.filterForm = this.fb.group({...defaultFilterOptions, ...JSON.parse(savedFilterOptions)});
+    } else {
+      this.filterForm.patchValue(defaultFilterOptions);
+    }
   }
 
   ngOnDestroy(): void {
