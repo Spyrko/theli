@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { ConfirmDialog, RequestChip, TherapistCardTs, TherapistService } from 'shared';
 import { NgIf } from '@angular/common';
 import { BusinessHoursList } from '../../details/business-hours-list/business-hours-list';
 import { CARD_PATH, OVERVIEW_PATH } from '../../../translation-paths';
 import { TranslocoPipe } from '@ngneat/transloco';
-import { MatIconButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,6 +27,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    MatCardActions,
+    MatButton,
   ],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss'
@@ -64,6 +66,10 @@ export class CardComponent {
           });
       }
     });
+  }
+
+  startCall(value: string) {
+    window.location.href = `tel:${value}`;
   }
 
 }

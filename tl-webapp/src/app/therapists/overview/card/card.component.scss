@@ -21,4 +21,28 @@ mat-card-header button {
   padding: 0.125rem !important;
 }
 
+.phone-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  p {
+    margin: 0;
+    font: var(mat-sys-body-medium-font);
+  }
+}
+
+
+.call-button {
+  width: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  mat-icon {
+    margin: 0;
+  }
+}
+
+
 

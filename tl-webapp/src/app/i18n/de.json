@@ -81,7 +81,8 @@
   "formFields": {
     "errors": {
       "required": "Dieses Feld ist erforderlich.",
-      "matDatepickerParse": "Ungültiges Format"
+      "matDatepickerParse": "Ungültiges Format",
+      "email": "Ungültige E-Mail-Adresse"
     },
     "businessHours": {
       "dayOfWeek": {
