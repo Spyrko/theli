@@ -9,6 +9,9 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { AvatarModule } from 'ngx-avatars';
 import { Location, NgTemplateOutlet } from '@angular/common';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatDivider } from '@angular/material/divider';
 
 export type ToolbarConfiguration = {
   showReturnArrow?: boolean;
@@ -32,7 +35,10 @@ export type ToolbarConfiguration = {
     MatMenuItem,
     MatMenuTrigger,
     MatIconButton,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    MatSlideToggle,
+    ReactiveFormsModule,
+    MatDivider
   ],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.scss'
@@ -51,7 +57,10 @@ export class Toolbar {
   protected readonly TOOLBAR_PATH = TOOLBAR_PATH;
 
   constructor(private authService: AuthService, private location: Location) {
+    this.setDarkMode(this.darkModeControl.value || false);
   }
+
+  protected darkModeControl = new FormControl(localStorage.getItem('darkMode') === 'true');
 
   private _config: ToolbarConfiguration = {};
 
@@ -65,5 +74,14 @@ export class Toolbar {
 
   onReturnArrowClick(): void {
     this.location.back()
+  }
+
+  onDarkModeChange($event: MatSlideToggleChange) {
+    this.setDarkMode($event.checked);
+  }
+
+  setDarkMode(darkMode: boolean) {
+    localStorage.setItem('darkMode', darkMode.toString());
+    document.documentElement.classList.toggle('dark', darkMode);
   }
 }

@@ -12,7 +12,7 @@
 .search-box {
   background-color: var(--mat-sys-surface-container);
   border: 1px solid;
-  border-color: var(--mat-sys-secondary);
+  border-color: var(--mat-sys-surface-variant);
   border-right: 0;
   border-radius: var(--mat-sys-headline-large-line-height) 0 0 var(--mat-sys-headline-large-line-height);
   height: var(--mat-sys-headline-large-line-height);
@@ -38,15 +38,15 @@
   width: 100%;
   box-sizing: border-box;
   font: var(--mat-sys-body-large);
-  caret-color: var(--mat-sys-secondary);
+  caret-color: var(--mat-sys-on-surface);
 }
 
 button {
   height: var(--mat-sys-headline-large-line-height);
-  background-color: var(--mat-sys-secondary);
-  color: var(--mat-sys-on-secondary);
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
   border: 1px solid;
-  border-color: var(--mat-sys-secondary);
+  border-color: var(--mat-sys-surface-variant);
   border-radius: 0 var(--mat-sys-headline-large-line-height) var(--mat-sys-headline-large-line-height) 0;
   width: calc(1.5 * var(--mat-sys-headline-large-line-height));
   flex: 0 0 auto;
