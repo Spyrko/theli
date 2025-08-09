@@ -19,6 +19,7 @@ export class LabelAboveDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      console.log('LabelAboveDirective: ngAfterViewInit');
       const matFormField = this.el.nativeElement;
 
       // 1. Find <field-label> or <mat-label>

@@ -1,5 +1,8 @@
 package de.chiworks.tlserver.therapists.rest;
 
+import static de.chiworks.tlserver.therapists.model.RequestStatus.WAITLISTED;
+import static de.chiworks.tlserver.therapists.model.RequestStatus.WAITLIST_CLOSED_UNTIL;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -105,8 +108,15 @@ public class TherapistController {
 
     @Nonnull
     private TherapistTs saveTherapist(@Nonnull TherapistTs therapistTs, @Nonnull User user) {
+        cleanupTherapistTs(therapistTs);
         Therapist therapist = therapistRepo.save(therapistMapper.toTherapist(therapistTs, user));
         return therapistMapper.toTherapistTs(therapist);
+    }
+
+    private void cleanupTherapistTs(@Nonnull TherapistTs therapistTs) {
+        if (therapistTs.getRequestStatus() != WAITLISTED && therapistTs.getRequestStatus() != WAITLIST_CLOSED_UNTIL) {
+            therapistTs.setWaitingTime(null);
+        }
     }
 
     private void authorizeAccess(@Nonnull TherapistTs therapistTs, @Nonnull User user) {

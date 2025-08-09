@@ -108,7 +108,9 @@
       "REQUESTED": "Angefragt",
       "ACCEPTED": "Akzeptiert",
       "REJECTED": "Abgelehnt",
-      "WAITLISTED": "Auf Warteliste"
+      "WAITLISTED": "Auf Warteliste",
+      "WAITLIST_CLOSED_UNTIL": "Warteliste Geschlossen bis",
+      "NOT_INTERESTED": "Nicht Interessiert"
     }
   }
 }
