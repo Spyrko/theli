@@ -23,7 +23,7 @@
       }
       @if (!config.buttons || config.mergeButtons) {
         @if (isLoggedIn) {
-          <div style="width: 12px"></div>
+          <div style="width: 0.75rem"></div>
           <button mat-icon-button [matMenuTriggerFor]="userMenu" id="user-menu-button">
             <ngx-avatars
               name="{{ userName }}"

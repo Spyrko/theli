@@ -11,7 +11,7 @@
 }
 
 mat-chip {
-  height: 24px;
+  height: var(--mat-sys-title-medium-line-height);
 }
 
 .NOT_REQUESTED {
