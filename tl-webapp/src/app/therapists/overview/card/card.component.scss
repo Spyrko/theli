@@ -7,6 +7,10 @@ mat-card {
   height: 100%;
 }
 
+p {
+  font: var(mat-sys-body-medium-font);
+}
+
 mat-card:hover {
   @include mat.elevation(8)
 }
@@ -21,19 +25,22 @@ mat-card-header button {
   padding: 0.125rem !important;
 }
 
-.phone-row {
+.phone-row, .email-row {
   display: flex;
   align-items: center;
   gap: 0.375rem;
+  margin: 1rem 0;
 
   p {
     margin: 0;
-    font: var(mat-sys-body-medium-font);
   }
 }
 
+mat-card-actions {
+  gap: 0.5rem
+}
 
-.call-button {
+.call-button, .email-button {
   width: 5rem;
   display: flex;
   justify-content: center;

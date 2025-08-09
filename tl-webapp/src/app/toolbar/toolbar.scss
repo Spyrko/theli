@@ -3,6 +3,10 @@
   width: var(--mat-sys-headline-large-line-height) !important;
 }
 
+mat-toolbar {
+  background-color: color-mix(in srgb, var(--mat-toolbar-container-background-color, var(--mat-sys-surface)) 95%, transparent);
+}
+
 .mat-toolbar-row {
   gap: 0.25rem;
   justify-content: space-between;
