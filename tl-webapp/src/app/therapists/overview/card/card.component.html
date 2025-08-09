@@ -20,15 +20,28 @@
   <mat-card-content>
     <p *ngIf="therapist.specialization as value" style="font-weight: var(--mat-sys-label-medium-weight)">{{ value }}</p>
     <p *ngIf="therapist.waitingTime?.toLocaleDateString() as value">{{ `${CARD_PATH + ".waitlist" | transloco}: ${value}` }} </p>
-    <p *ngIf="therapist.emailAddress as value">{{ `${CARD_PATH + ".mail" | transloco}: ${value}` }}</p>
     <div *ngIf="therapist.phoneNumber as value" class="phone-row">
       <mat-icon>call</mat-icon>
       <p>{{ value }}</p>
     </div>
-    <p *ngIf="therapist.contactTimes as value">
-      <app-business-hours-list [businessHours]="value" [disabled]="true"/>
+    <div *ngIf="therapist.emailAddress as value" class="email-row">
+      <mat-icon>email</mat-icon>
+      <p>{{ value }}</p>
+    </div>
+    <p *ngIf="therapist.contactTimes && therapist.contactTimes.length > 0">
+      <app-business-hours-list [businessHours]="therapist.contactTimes" [disabled]="true"/>
     </p>
     <mat-card-actions>
+      <button *ngIf="therapist.phoneNumber && therapist.emailAddress as value" mat-stroked-button class="email-button" (click)="sendEmail(value)"
+              (mousedown)="$event.stopPropagation()"
+              aria-label="Email">
+        <mat-icon>email</mat-icon>
+      </button>
+      <button *ngIf="!therapist.phoneNumber && therapist.emailAddress as value" mat-flat-button class="email-button" (click)="sendEmail(value)"
+              (mousedown)="$event.stopPropagation()"
+              aria-label="Email">
+        <mat-icon>email</mat-icon>
+      </button>
       <button *ngIf="therapist.phoneNumber as value" mat-flat-button class="call-button" (click)="startCall(value)" (mousedown)="$event.stopPropagation()"
               aria-label="Call">
         <mat-icon>call</mat-icon>

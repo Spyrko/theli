@@ -72,4 +72,8 @@ export class CardComponent {
     window.location.href = `tel:${value}`;
   }
 
+  sendEmail(value: string) {
+    window.location.href = `mailto:${value}`;
+  }
+
 }
