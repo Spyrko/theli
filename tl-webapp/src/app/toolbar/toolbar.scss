@@ -36,3 +36,16 @@ mat-toolbar .mat-mdc-icon-button {
   height: var(--mat-sys-headline-medium-line-height);
   width: var(--mat-sys-headline-medium-line-height);
 }
+
+::ng-deep .mat-mdc-menu-panel mat-slide-toggle {
+  padding: 0 0.75rem !important;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .mat-mdc-menu-panel mat-slide-toggle > div {
+  display: flex;
+  gap: 0.25rem;
+  font: var(--mat-sys-label-large)
+}

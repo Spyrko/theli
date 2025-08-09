@@ -5,7 +5,8 @@
       "loginButton": "Anmelden",
       "logoutButton": "Abmelden",
       "registerButton": "Registrieren",
-      "search": "Suchen"
+      "search": "Suchen",
+      "darkModeToggle": "Dark Mode"
     },
     "login": {
       "title": "Anmelden",

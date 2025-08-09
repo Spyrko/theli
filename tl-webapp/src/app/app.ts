@@ -29,8 +29,6 @@ export class App {
   }
 
 
-  protected readonly APP_PATH = APP_PATH;
-
   onToolbarConfigChanged($event: ToolbarConfiguration) {
     this.toolbarConfig = {...this.defaultToolbarConfig, ...$event};
     this.cdr.detectChanges()

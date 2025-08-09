@@ -31,8 +31,11 @@
               [round]="true"
             ></ngx-avatars>
           </button>
-
           <mat-menu #userMenu="matMenu">
+            <mat-slide-toggle labelPosition="before" [formControl]="darkModeControl" (change)="onDarkModeChange($event)" (click)="$event.stopPropagation()">
+              {{ `${TOOLBAR_PATH}.darkModeToggle` | transloco }}
+            </mat-slide-toggle>
+            <mat-divider></mat-divider>
             <button mat-menu-item routerLink="/logout">
               <mat-icon>logout</mat-icon>
               <span>{{ `${TOOLBAR_PATH}.logoutButton` | transloco }}</span>
