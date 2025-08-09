@@ -62,7 +62,7 @@ html.dark {
   --disabled-on-surface: var(
       color-mix(in srgb, var(--mat-sys-on-surface) 38%, transparent));
   --mat-sys-divider-width: 0.125rem; /* Default divider width */
-  --divider-color: var(--mat-sys-divider-color, var(--mat-sys-on-surface-variant)); /* Default divider color */
+  --divider-color: var(--mat-sys-divider-color, var(--mat-sys-surface-variant)); /* Default divider color */
   --mat-toolbar-mobile-height: 3.5rem;
   --mat-toolbar-standard-height: var(--mat-toolbar-mobile-height);
 }
@@ -88,8 +88,8 @@ app-root {
 html, body {
   height: 100%;
   background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface-container);
-  caret-color: var(--mat-sys-on-surface-container);
+  color: var(--mat-sys-on-surface-container, var(--mat-sys-on-surface));
+  caret-color: var(--mat-sys-on-surface-container, var(--mat-sys-on-surface));
 }
 
 input {
