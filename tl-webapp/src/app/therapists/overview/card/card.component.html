@@ -21,7 +21,18 @@
     <p *ngIf="therapist.specialization as value" style="font-weight: var(--mat-sys-label-medium-weight)">{{ value }}</p>
     <p *ngIf="therapist.waitingTime?.toLocaleDateString() as value">{{ `${CARD_PATH + ".waitlist" | transloco}: ${value}` }} </p>
     <p *ngIf="therapist.emailAddress as value">{{ `${CARD_PATH + ".mail" | transloco}: ${value}` }}</p>
-    <p *ngIf="therapist.phoneNumber as value">{{ `${CARD_PATH + ".phone" | transloco}: ${value}` }}</p>
-    <app-business-hours-list *ngIf="therapist.contactTimes as value" [businessHours]="value" [disabled]="true"></app-business-hours-list>
+    <div *ngIf="therapist.phoneNumber as value" class="phone-row">
+      <mat-icon>call</mat-icon>
+      <p>{{ value }}</p>
+    </div>
+    <p *ngIf="therapist.contactTimes as value">
+      <app-business-hours-list [businessHours]="value" [disabled]="true"/>
+    </p>
+    <mat-card-actions>
+      <button *ngIf="therapist.phoneNumber as value" mat-flat-button class="call-button" (click)="startCall(value)" (mousedown)="$event.stopPropagation()"
+              aria-label="Call">
+        <mat-icon>call</mat-icon>
+      </button>
+    </mat-card-actions>
   </mat-card-content>
 </mat-card>
