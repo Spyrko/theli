@@ -15,7 +15,7 @@
     <div class="form-subsection" style="flex-direction: column">
       <mat-form-field autoError labelAbove>
         <app-field-label>{{ DETAILS_PATH + ".label.requestStatus" | transloco }}</app-field-label>
-        <mat-select formControlName="requestStatus" required (selectionChange)="onRequestStatusChanged($event)">
+        <mat-select formControlName="requestStatus" required>
           <mat-select-trigger>
             <app-request-chip [value]="form.get('requestStatus')?.value"/>
           </mat-select-trigger>
@@ -28,21 +28,7 @@
         <app-field-error/>
       </mat-form-field>
 
-      @if (showWaitingTime) {
-        <mat-form-field autoError labelAbove>
-          <app-field-label>{{ DETAILS_PATH + ".label.waitingTime" | transloco }}</app-field-label>
-          <input
-            matInput
-            [matDatepicker]="datepicker"
-            formControlName="waitingTime"
-            [min]="DateTime.now()"/>
-          @if (!form.disabled) {
-            <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
-          }
-          <mat-datepicker #datepicker></mat-datepicker>
-          <app-field-error/>
-        </mat-form-field>
-      }
+      <app-waiting-time [formControl]="waitingTimeControl" [requestStatus]="therapistForm.get('requestStatus')?.value"/>
     </div>
     <mat-divider/>
     <div class="form-subsection">

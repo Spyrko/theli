@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormField, MatInput } from '@angular/material/input';
 import {
   AutoErrorDirective,
   FieldError,
@@ -22,9 +22,8 @@ import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directi
 import { TextareaDirective } from './text-area.directive';
 import { MatIcon } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
-import { MatOption, MatSelect, MatSelectChange, MatSelectTrigger } from '@angular/material/select';
-import { DateTime } from 'ts-luxon';
-import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
+import { MatOption, MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { WaitingTimeComponent } from '../overview/waiting-time/waiting-time.component';
 
 
 @Component({
@@ -48,12 +47,9 @@ import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular
     NgIf,
     MatSelect,
     MatOption,
-    MatSuffix,
-    MatDatepicker,
-    MatDatepickerInput,
-    MatDatepickerToggle,
     RequestChip,
-    MatSelectTrigger
+    MatSelectTrigger,
+    WaitingTimeComponent
   ],
   templateUrl: './details.html',
   styleUrl: './details.scss'
@@ -66,13 +62,6 @@ export class Details extends ToolbarDataProvider implements AfterViewInit, OnIni
   @ViewChildren(TextareaDirective, {read: ElementRef})
   private textAreas!: QueryList<ElementRef<HTMLTextAreaElement>>;
   private loadedTherapist?: TherapistTs;
-
-  private _showWaitingTime = true;
-
-  get showWaitingTime(): boolean {
-    return this._showWaitingTime && [RequestStatus.WAITLISTED, RequestStatus.WAITLIST_CLOSED_UNTIL].includes(this.therapistForm?.get('requestStatus')?.value);
-  }
-
 
   setTherapistForm(therapist?: TherapistTs) {
     this.therapistForm = this.fb.group({
@@ -169,23 +158,10 @@ export class Details extends ToolbarDataProvider implements AfterViewInit, OnIni
   }
 
   protected readonly RequestStatus = Object.values(RequestStatus);
-  protected readonly DateTime = DateTime;
 
-  onRequestStatusChanged($event: MatSelectChange<RequestStatus>) {
-    const waitingTime = this.therapistForm?.get('waitingTime');
-    if ($event.value === RequestStatus.WAITLIST_CLOSED_UNTIL) {
-      waitingTime?.setValidators(Validators.required);
-    } else {
-      waitingTime?.clearValidators();
-    }
-    this.redrawWaitingTime();
-  }
-
-  private redrawWaitingTime() {
-    this._showWaitingTime = false;
-    this.cdr.detectChanges();
-    this._showWaitingTime = true;
-  }
+  get waitingTimeControl(): FormControl {
+    return this.therapistForm?.get('waitingTime') as FormControl;
+  };
 }
 
 
