@@ -29,19 +29,6 @@
   }
 }
 
-$my-typography: (
-  brand-family: 'Roboto, sans-serif',
-  plain-family: 'Roboto, sans-serif',
-  regular-weight: 400,
-  medium-weight: 500,
-  bold-weight: 700,
-  use-system-variables: true,
-);
-
-$my-density: (
-  scale: 0, // Wert von -3 bis +3, 0 = Standard-Dichte
-);
-
 
 html {
   @include mat.theme((

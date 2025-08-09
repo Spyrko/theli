@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 ::ng-deep .mdc-evolution-chip {
   background-color: var(--chip-background-color) !important; // helles Gelb wie bei Warnungen
 }
@@ -12,29 +14,49 @@
 
 mat-chip {
   height: var(--mat-sys-title-medium-line-height);
+  --chip-background-color: var(--mat-sys-primary-container);
+  --chip-color: var(--mat-sys-on-primary-container);
 }
 
 .NOT_REQUESTED {
-  --chip-background-color: #D6D6D6;
-  --chip-color: #757575;
-}
-
-.REQUESTED {
-  --chip-background-color: #BBDEFB;
-  --chip-color: #2196F3;
-}
-
-.ACCEPTED {
-  --chip-background-color: #C8E6C9;
-  --chip-color: #4CAF50;
+  --mat-sys-primary-container: var(--mat-sys-surface-variant);
+  --mat-sys-on-primary-container: var(--mat-sys-on-surface-variant);
 }
 
 .REJECTED {
-  --chip-background-color: #FFCDD2;
-  --chip-color: #EF5350;
+  --mat-sys-primary-container: var(--mat-sys-error);
+  --mat-sys-on-primary-container: var(--mat-sys-on-error);
 }
 
-.WAITLISTED {
-  --chip-background-color: #FFE0B2;
-  --chip-color: #F57C00;
+@mixin themeRequestType($requestType, $palette) {
+  ::ng-deep :not(.dark) .#{$requestType} {
+    @include mat.theme((
+      color: (
+        theme-type: light,
+        primary: $palette,
+        tertiary: $palette,
+      ),
+      typography: Roboto,
+      density: -2,
+    ));
+  }
+
+  ::ng-deep .dark .#{$requestType} {
+    @include mat.theme((
+      color: (
+        theme-type: dark,
+        primary: $palette,
+        tertiary: $palette,
+      ),
+      typography: Roboto,
+      density: -2,
+    ));
+  }
 }
+
+
+@include themeRequestType(REQUESTED, mat.$azure-palette);
+@include themeRequestType(ACCEPTED, mat.$spring-green-palette);
+@include themeRequestType(NOT_INTERESTED, mat.$red-palette);
+@include themeRequestType(WAITLISTED, mat.$orange-palette);
+@include themeRequestType(WAITLIST_CLOSED_UNTIL, mat.$magenta-palette);

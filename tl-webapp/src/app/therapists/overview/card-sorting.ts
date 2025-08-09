@@ -104,6 +104,7 @@ function getScore(card: TherapistCardTs): number {
     case RequestStatus.ACCEPTED:
       return 0;
 
+    case RequestStatus.WAITLIST_CLOSED_UNTIL:
     case RequestStatus.WAITLISTED:
       if (!card.waitingTime) {
         return 45;
@@ -125,6 +126,9 @@ function getScore(card: TherapistCardTs): number {
 
     case RequestStatus.REJECTED:
       return 50;
+
+    case RequestStatus.NOT_INTERESTED:
+      return 60;
     default:
       return 100;
   }

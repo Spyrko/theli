@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatInput, MatSuffix } from '@angular/material/input';
@@ -15,14 +15,14 @@ import {
 } from 'shared';
 import { MatDivider } from '@angular/material/divider';
 import { BusinessHoursList } from './business-hours-list/business-hours-list';
-import { DETAILS_PATH, ENUM_PATH } from '../../translation-paths';
+import { DETAILS_PATH } from '../../translation-paths';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { ToolbarDataProvider } from '../../toolbar/toolbar-data-provider.directive';
 import { TextareaDirective } from './text-area.directive';
 import { MatIcon } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
-import { MatOption, MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { MatOption, MatSelect, MatSelectChange, MatSelectTrigger } from '@angular/material/select';
 import { DateTime } from 'ts-luxon';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 
@@ -67,8 +67,10 @@ export class Details extends ToolbarDataProvider implements AfterViewInit, OnIni
   private textAreas!: QueryList<ElementRef<HTMLTextAreaElement>>;
   private loadedTherapist?: TherapistTs;
 
+  private _showWaitingTime = true;
+
   get showWaitingTime(): boolean {
-    return this.therapistForm?.get('requestStatus')?.value === RequestStatus.WAITLISTED;
+    return this._showWaitingTime && [RequestStatus.WAITLISTED, RequestStatus.WAITLIST_CLOSED_UNTIL].includes(this.therapistForm?.get('requestStatus')?.value);
   }
 
 
@@ -91,7 +93,8 @@ export class Details extends ToolbarDataProvider implements AfterViewInit, OnIni
   constructor(private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
-              private therapistService: TherapistService) {
+              private therapistService: TherapistService,
+              private cdr: ChangeDetectorRef) {
     super();
     this.showReturnArrow = true;
   }
@@ -166,8 +169,23 @@ export class Details extends ToolbarDataProvider implements AfterViewInit, OnIni
   }
 
   protected readonly RequestStatus = Object.values(RequestStatus);
-  protected readonly ENUM_PATH = ENUM_PATH;
   protected readonly DateTime = DateTime;
+
+  onRequestStatusChanged($event: MatSelectChange<RequestStatus>) {
+    const waitingTime = this.therapistForm?.get('waitingTime');
+    if ($event.value === RequestStatus.WAITLIST_CLOSED_UNTIL) {
+      waitingTime?.setValidators(Validators.required);
+    } else {
+      waitingTime?.clearValidators();
+    }
+    this.redrawWaitingTime();
+  }
+
+  private redrawWaitingTime() {
+    this._showWaitingTime = false;
+    this.cdr.detectChanges();
+    this._showWaitingTime = true;
+  }
 }
 
 
