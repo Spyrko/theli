@@ -4,9 +4,17 @@ on:
   push:
     tags:
       - "v*"
+      
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
   build:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,9 +38,22 @@ jobs:
             ./${{ matrix.service.path }} \
             --file ./${{ matrix.service.path }}/Dockerfile \
             --tag ${{ matrix.service.name }}:${VERSION}
+      
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/GitHubActions-Theli-ECR-Push
+          aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Tag Docker image as latest
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag & Push to ECR
         run: |
-          docker tag \
-            ${{ matrix.service.name }}:${VERSION} \
-            ${{ matrix.service.name }}:latest
+          ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${{ matrix.service.name }}
+
+          docker tag ${{ matrix.service.name }}:${VERSION} $ECR_URI:${VERSION}
+          docker tag ${{ matrix.service.name }}:${VERSION} $ECR_URI:latest
+
+          docker push $ECR_URI:${VERSION}
+          docker push $ECR_URI:latest
