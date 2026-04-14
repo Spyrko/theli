@@ -1,0 +1,38 @@
+name: Build Docker Images on Tag
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - name: theli-server
+            path: tl-server
+          - name: theli-webapp
+            path: tl-webapp
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from Git tag
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Build Docker image (versioned)
+        run: |
+          docker build \
+            ./${{ matrix.service.path }} \
+            --file ./${{ matrix.service.path }}/Dockerfile \
+            --tag ${{ matrix.service.name }}:${VERSION}
+
+      - name: Tag Docker image as latest
+        run: |
+          docker tag \
+            ${{ matrix.service.name }}:${VERSION} \
+            ${{ matrix.service.name }}:latest
