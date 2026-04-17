@@ -1,20 +1,21 @@
-# Use official Node.js image as base
-FROM node:20-alpine
+FROM node:20-alpine AS build
 
-# Set working directory inside container
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (for caching)
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy all source files
 COPY . .
+RUN npm run build -- --configuration production
 
-# Expose port 4200 for Angular dev server
-EXPOSE 4200
+FROM nginx:1.27-alpine
 
-# Start Angular dev server, listen on all interfaces for Docker
-CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "4200", "--hmr=false"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/tl-webapp/browser /usr/share/nginx/html
+
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1/health || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
