@@ -1,0 +1,43 @@
+/**
+ * Global SCSS Mixins
+ * Reusable mixins for consistent styling across the application
+ */
+
+@use '@angular/material' as mat;
+
+/**
+ * Elevation mixin for Material Design shadow effects
+ * @param {number} $elevation - Elevation level (0-24)
+ */
+@mixin elevation($elevation) {
+  @include mat.elevation($elevation);
+}
+
+/**
+ * Responsive breakpoint mixin
+ * @param {string} $breakpoint - Breakpoint name: xs, sm, md, lg, xl
+ */
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: 599px) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (min-width: 600px) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: 960px) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: 1280px) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1920px) {
+      @content;
+    }
+  }
+}
+

@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use '../../../../mixins.scss' as m;
 
 mat-card {
   cursor: pointer;
@@ -12,7 +12,7 @@ p {
 }
 
 mat-card:hover {
-  @include mat.elevation(8)
+  @include m.elevation(8)
 }
 
 mat-card-header {

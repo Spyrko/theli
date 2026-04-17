@@ -1,34 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
 @include mat.core();
 
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == xs {
-    @media (max-width: 599px) {
-      @content;
-    }
-  } @else if $breakpoint == sm {
-    @media (min-width: 600px) {
-      @content;
-    }
-  } @else if $breakpoint == md {
-    @media (min-width: 960px) {
-      @content;
-    }
-  } @else if $breakpoint == lg {
-    @media (min-width: 1280px) {
-      @content;
-    }
-  } @else if $breakpoint == xl {
-    @media (min-width: 1920px) {
-      @content;
-    }
-  }
-}
-
+@import './mixins.scss';
+@import './request-chip-themes.scss';
 
 html {
   @include mat.theme((

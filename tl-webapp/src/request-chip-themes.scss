@@ -1,0 +1,27 @@
+/**
+ * Request Chip Theme Definitions
+ * Global theme definitions for request chip component variants
+ */
+
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin themeRequestType($requestType, $palette) {
+  ::ng-deep :not(.dark) .#{$requestType} {
+    --mat-sys-primary-container: #{map.get($palette, 90)};
+    --mat-sys-on-primary-container: #{map.get($palette, 30)};
+  }
+
+  ::ng-deep :not(.dark) .#{$requestType} {
+    --mat-sys-primary-container: #{map.get($palette, 30)};
+    --mat-sys-on-primary-container: #{map.get($palette, 90)};
+  }
+}
+
+/* Request status themes */
+@include themeRequestType(REQUESTED, mat.$azure-palette);
+@include themeRequestType(ACCEPTED, mat.$spring-green-palette);
+@include themeRequestType(NOT_INTERESTED, mat.$red-palette);
+@include themeRequestType(WAITLISTED, mat.$orange-palette);
+@include themeRequestType(WAITLIST_CLOSED_UNTIL, mat.$magenta-palette);
+

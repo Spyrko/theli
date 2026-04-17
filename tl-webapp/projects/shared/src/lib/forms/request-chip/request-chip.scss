@@ -1,11 +1,13 @@
-@use '@angular/material' as mat;
+/**
+ * Request Chip Component Styles
+ */
 
 ::ng-deep .mdc-evolution-chip {
-  background-color: var(--chip-background-color) !important; // helles Gelb wie bei Warnungen
+  background-color: var(--chip-background-color) !important;
 }
 
 ::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before {
-  border-color: var(--chip-color) !important; // optional, für besseren Kontrast
+  border-color: var(--chip-color) !important;
 }
 
 ::ng-deep .mdc-evolution-chip .mdc-evolution-chip__text-label {
@@ -28,35 +30,3 @@ mat-chip {
   --mat-sys-on-primary-container: var(--mat-sys-on-error);
 }
 
-@mixin themeRequestType($requestType, $palette) {
-  ::ng-deep :not(.dark) .#{$requestType} {
-    @include mat.theme((
-      color: (
-        theme-type: light,
-        primary: $palette,
-        tertiary: $palette,
-      ),
-      typography: Roboto,
-      density: -2,
-    ));
-  }
-
-  ::ng-deep .dark .#{$requestType} {
-    @include mat.theme((
-      color: (
-        theme-type: dark,
-        primary: $palette,
-        tertiary: $palette,
-      ),
-      typography: Roboto,
-      density: -2,
-    ));
-  }
-}
-
-
-@include themeRequestType(REQUESTED, mat.$azure-palette);
-@include themeRequestType(ACCEPTED, mat.$spring-green-palette);
-@include themeRequestType(NOT_INTERESTED, mat.$red-palette);
-@include themeRequestType(WAITLISTED, mat.$orange-palette);
-@include themeRequestType(WAITLIST_CLOSED_UNTIL, mat.$magenta-palette);
